@@ -10,6 +10,7 @@ import "../styles/globals.css";
 import store from "../store/store";
 import { Provider } from "react-redux";
 import { VechaiProvider } from "@vechaiui/react";
+import { AuthContextProvider } from "../context/auth.context";
 
 const MyApp: AppType = ({
   Component,
@@ -19,7 +20,9 @@ const MyApp: AppType = ({
     <SessionProvider session={session}>
       <Provider store={store}>
         <VechaiProvider>
-          <Component {...pageProps} />
+          <AuthContextProvider>
+            <Component {...pageProps} />
+          </AuthContextProvider>
         </VechaiProvider>
       </Provider>
     </SessionProvider>

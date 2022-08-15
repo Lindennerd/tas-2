@@ -41,3 +41,5 @@ yarn-error.log*
 
 #ignore dev db
 db.sqlite
+
+/prisma/generated
