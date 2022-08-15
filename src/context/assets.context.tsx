@@ -10,7 +10,16 @@ interface IAssetsContext {
 
 const AssetsContext = createContext<IAssetsContext | null>(null);
 
-export const useAssetsContext = () => useContext(AssetsContext);
+export const useAssetsContext = () => {
+  const context = useContext(AssetsContext);
+  if (!context) {
+    throw new Error(
+      "useAssetsContext must be used within an AssetsContextProvider"
+    );
+  }
+
+  return context;
+};
 
 export function AssetsContextProvider({
   children,

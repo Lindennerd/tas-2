@@ -19,7 +19,7 @@ const MyApp: AppType = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <VechaiProvider theme={theme}>
+      <VechaiProvider theme={theme} colorScheme="cool">
         <AuthContextProvider>
           <MainLayout>
             <Component {...pageProps} />

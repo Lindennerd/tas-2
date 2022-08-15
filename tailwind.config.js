@@ -8,14 +8,15 @@ module.exports = {
     extend: {
       colors: {
         ofcprimary: '#3f51b5',
-        ofcsecondary: '#2C4E7F'
+        ofcsecondary: '#2C4E7F',
+        success: '#4caf50',
       }
     },
   },
     plugins: [
     require("@tailwindcss/forms"),
       require("@vechaiui/core")({
-        color: ["ofcprimary", "ofcsecondary"],
+        color: ["ofcprimary", "ofcsecondary", "success"],
     })
   ],
 };
