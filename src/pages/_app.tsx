@@ -1,10 +1,15 @@
 // src/pages/_app.tsx
 import { withTRPC } from "@trpc/next";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { loggerLink } from "@trpc/client/links/loggerLink";
 import type { AppRouter } from "../server/router";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import store from "../store/store";
+import { Provider } from "react-redux";
+import { VechaiProvider } from "@vechaiui/react";
 
 const MyApp: AppType = ({
   Component,
@@ -12,7 +17,11 @@ const MyApp: AppType = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <VechaiProvider>
+          <Component {...pageProps} />
+        </VechaiProvider>
+      </Provider>
     </SessionProvider>
   );
 };
@@ -26,21 +35,41 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
+const url = `${getBaseUrl()}/api/trpc`;
+
 export default withTRPC<AppRouter>({
   config({ ctx }) {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr
      */
-    const url = `${getBaseUrl()}/api/trpc`;
-
+    const links = [
+      loggerLink(),
+      httpBatchLink({
+        maxBatchSize: 10,
+        url,
+      }),
+    ];
     return {
-      url,
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            staleTime: 60,
+          },
+        },
+      },
+      headers() {
+        if (ctx?.req) {
+          return {
+            ...ctx.req.headers,
+            "x-ssr": "1",
+          };
+        }
+        return {};
+      },
+      links,
       transformer: superjson,
-      /**
-       * @link https://react-query.tanstack.com/reference/QueryClient
-       */
-      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     };
   },
   /**
