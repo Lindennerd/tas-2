@@ -12,6 +12,10 @@ generator trpc {
   contextPath    = "../src/server/router/context.ts"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "sqlite"
   // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.text annotations in model Account below
