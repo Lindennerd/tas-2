@@ -11,6 +11,9 @@ import store from "../store/store";
 import { Provider } from "react-redux";
 import { VechaiProvider } from "@vechaiui/react";
 import { AuthContextProvider } from "../context/auth.context";
+import { MainLayout } from "../components/Layouts";
+
+import theme from "../theme/vecha.theme";
 
 const MyApp: AppType = ({
   Component,
@@ -19,9 +22,11 @@ const MyApp: AppType = ({
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
-        <VechaiProvider>
+        <VechaiProvider theme={theme}>
           <AuthContextProvider>
-            <Component {...pageProps} />
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
           </AuthContextProvider>
         </VechaiProvider>
       </Provider>
