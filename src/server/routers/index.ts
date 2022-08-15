@@ -16,33 +16,34 @@ import { answersRouter } from "./Answer.router";
 import { commentsRouter } from "./Comment.router";
 
 export const appRouter = createProtectedRouter()
+  .merge("account.", accountsRouter)
 
-  .merge('account.', accountsRouter)
+  .merge("session.", sessionsRouter)
 
-  .merge('session.', sessionsRouter)
+  .merge("user.", usersRouter)
 
-  .merge('user.', usersRouter)
+  .merge("verificationtoken.", verificationtokensRouter)
 
-  .merge('verificationtoken.', verificationtokensRouter)
+  .merge("asset.", assetsRouter)
 
-  .merge('asset.', assetsRouter)
+  .merge("assetupdate.", assetupdatesRouter)
 
-  .merge('assetupdate.', assetupdatesRouter)
+  .merge("option.", optionsRouter)
 
-  .merge('option.', optionsRouter)
+  .merge("extensions.", extensionsRouter)
 
-  .merge('extensions.', extensionsRouter)
+  .merge("question.", questionsRouter)
 
-  .merge('question.', questionsRouter)
+  .merge("section.", sectionsRouter)
 
-  .merge('section.', sectionsRouter)
+  .merge("manifest.", manifestsRouter)
 
-  .merge('manifest.', manifestsRouter)
+  .merge("manifestupdate.", manifestupdatesRouter)
 
-  .merge('manifestupdate.', manifestupdatesRouter)
+  .merge("attachment.", attachmentsRouter)
 
-  .merge('attachment.', attachmentsRouter)
+  .merge("answer.", answersRouter)
 
-  .merge('answer.', answersRouter)
+  .merge("comment.", commentsRouter);
 
-  .merge('comment.', commentsRouter)
+export type AppRouter = typeof appRouter;

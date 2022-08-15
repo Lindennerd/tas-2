@@ -2,7 +2,7 @@
 import { withTRPC } from "@trpc/next";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
-import type { AppRouter } from "../server/context";
+import type { AppRouter } from "../server/routers/";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
