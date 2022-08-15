@@ -2,13 +2,11 @@
 import { withTRPC } from "@trpc/next";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
-import type { AppRouter } from "../server/routers/";
+import type { AppRouter } from "../server/context/";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import store from "../store/store";
-import { Provider } from "react-redux";
 import { VechaiProvider } from "@vechaiui/react";
 import { AuthContextProvider } from "../context/auth.context";
 import { MainLayout } from "../components/Layouts";
@@ -21,15 +19,13 @@ const MyApp: AppType = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Provider store={store}>
-        <VechaiProvider theme={theme}>
-          <AuthContextProvider>
-            <MainLayout>
-              <Component {...pageProps} />
-            </MainLayout>
-          </AuthContextProvider>
-        </VechaiProvider>
-      </Provider>
+      <VechaiProvider theme={theme}>
+        <AuthContextProvider>
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        </AuthContextProvider>
+      </VechaiProvider>
     </SessionProvider>
   );
 };
