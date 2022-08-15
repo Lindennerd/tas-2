@@ -7,6 +7,7 @@ const Schema: z.ZodType<Prisma.ExtensionsUncheckedCreateInput> = z
     id: z.string().optional(),
     description: z.string(),
     default: z.boolean().optional(),
+    questionId: z.string(),
   })
   .strict();
 

@@ -99,27 +99,33 @@ model AssetUpdate {
 }
 
 model Option {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   help        String?
   description String
-  default     Boolean @default(false)
+  default     Boolean  @default(false)
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId  String
 }
 
 model Extensions {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   description String
-  default     Boolean @default(false)
+  default     Boolean  @default(false)
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId  String
 }
 
 model Question {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   description String
   help        String?
   type        String
   weight      Int
-  Section     Section? @relation(fields: [sectionId], references: [id])
+  Section     Section?     @relation(fields: [sectionId], references: [id])
   sectionId   String?
   Answer      Answer[]
+  Option      Option[]
+  Extensions  Extensions[]
 }
 
 model Section {

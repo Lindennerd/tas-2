@@ -5,4 +5,5 @@ export const OptionScalarFieldEnumSchema = z.enum([
   'help',
   'description',
   'default',
+  'questionId',
 ]);

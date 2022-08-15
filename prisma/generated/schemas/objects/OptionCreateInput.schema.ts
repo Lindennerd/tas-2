@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { QuestionCreateNestedOneWithoutOptionInputObjectSchema } from './QuestionCreateNestedOneWithoutOptionInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -8,6 +9,9 @@ const Schema: z.ZodType<Prisma.OptionCreateInput> = z
     help: z.string().optional().nullable(),
     description: z.string(),
     default: z.boolean().optional(),
+    question: z.lazy(
+      () => QuestionCreateNestedOneWithoutOptionInputObjectSchema,
+    ),
   })
   .strict();
 

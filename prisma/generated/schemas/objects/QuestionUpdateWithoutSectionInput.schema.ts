@@ -3,6 +3,8 @@ import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdat
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { IntFieldUpdateOperationsInputObjectSchema } from './IntFieldUpdateOperationsInput.schema';
 import { AnswerUpdateManyWithoutQuestionNestedInputObjectSchema } from './AnswerUpdateManyWithoutQuestionNestedInput.schema';
+import { OptionUpdateManyWithoutQuestionNestedInputObjectSchema } from './OptionUpdateManyWithoutQuestionNestedInput.schema';
+import { ExtensionsUpdateManyWithoutQuestionNestedInputObjectSchema } from './ExtensionsUpdateManyWithoutQuestionNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -41,6 +43,12 @@ const Schema: z.ZodType<Prisma.QuestionUpdateWithoutSectionInput> = z
       .optional(),
     Answer: z
       .lazy(() => AnswerUpdateManyWithoutQuestionNestedInputObjectSchema)
+      .optional(),
+    Option: z
+      .lazy(() => OptionUpdateManyWithoutQuestionNestedInputObjectSchema)
+      .optional(),
+    Extensions: z
+      .lazy(() => ExtensionsUpdateManyWithoutQuestionNestedInputObjectSchema)
       .optional(),
   })
   .strict();

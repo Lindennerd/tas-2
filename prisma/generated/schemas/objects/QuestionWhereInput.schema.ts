@@ -5,6 +5,8 @@ import { IntFilterObjectSchema } from './IntFilter.schema';
 import { SectionRelationFilterObjectSchema } from './SectionRelationFilter.schema';
 import { SectionWhereInputObjectSchema } from './SectionWhereInput.schema';
 import { AnswerListRelationFilterObjectSchema } from './AnswerListRelationFilter.schema';
+import { OptionListRelationFilterObjectSchema } from './OptionListRelationFilter.schema';
+import { ExtensionsListRelationFilterObjectSchema } from './ExtensionsListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -54,6 +56,10 @@ const Schema: z.ZodType<Prisma.QuestionWhereInput> = z
       .optional()
       .nullable(),
     Answer: z.lazy(() => AnswerListRelationFilterObjectSchema).optional(),
+    Option: z.lazy(() => OptionListRelationFilterObjectSchema).optional(),
+    Extensions: z
+      .lazy(() => ExtensionsListRelationFilterObjectSchema)
+      .optional(),
   })
   .strict();
 

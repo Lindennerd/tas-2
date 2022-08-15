@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { OptionUncheckedCreateNestedManyWithoutQuestionInputObjectSchema } from './OptionUncheckedCreateNestedManyWithoutQuestionInput.schema';
+import { ExtensionsUncheckedCreateNestedManyWithoutQuestionInputObjectSchema } from './ExtensionsUncheckedCreateNestedManyWithoutQuestionInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -10,6 +12,17 @@ const Schema: z.ZodType<Prisma.QuestionUncheckedCreateWithoutAnswerInput> = z
     type: z.string(),
     weight: z.number(),
     sectionId: z.string().optional().nullable(),
+    Option: z
+      .lazy(
+        () => OptionUncheckedCreateNestedManyWithoutQuestionInputObjectSchema,
+      )
+      .optional(),
+    Extensions: z
+      .lazy(
+        () =>
+          ExtensionsUncheckedCreateNestedManyWithoutQuestionInputObjectSchema,
+      )
+      .optional(),
   })
   .strict();
 

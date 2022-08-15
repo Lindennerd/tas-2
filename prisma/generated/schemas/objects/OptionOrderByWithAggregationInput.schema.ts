@@ -12,6 +12,7 @@ const Schema: z.ZodType<Prisma.OptionOrderByWithAggregationInput> = z
     help: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     default: z.lazy(() => SortOrderSchema).optional(),
+    questionId: z.lazy(() => SortOrderSchema).optional(),
     _count: z
       .lazy(() => OptionCountOrderByAggregateInputObjectSchema)
       .optional(),

@@ -4,4 +4,5 @@ export const ExtensionsScalarFieldEnumSchema = z.enum([
   'id',
   'description',
   'default',
+  'questionId',
 ]);

@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { SectionOrderByWithRelationInputObjectSchema } from './SectionOrderByWithRelationInput.schema';
 import { AnswerOrderByRelationAggregateInputObjectSchema } from './AnswerOrderByRelationAggregateInput.schema';
+import { OptionOrderByRelationAggregateInputObjectSchema } from './OptionOrderByRelationAggregateInput.schema';
+import { ExtensionsOrderByRelationAggregateInputObjectSchema } from './ExtensionsOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -18,6 +20,12 @@ const Schema: z.ZodType<Prisma.QuestionOrderByWithRelationInput> = z
     sectionId: z.lazy(() => SortOrderSchema).optional(),
     Answer: z
       .lazy(() => AnswerOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    Option: z
+      .lazy(() => OptionOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    Extensions: z
+      .lazy(() => ExtensionsOrderByRelationAggregateInputObjectSchema)
       .optional(),
   })
   .strict();

@@ -11,6 +11,7 @@ const Schema: z.ZodType<Prisma.ExtensionsOrderByWithAggregationInput> = z
     id: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     default: z.lazy(() => SortOrderSchema).optional(),
+    questionId: z.lazy(() => SortOrderSchema).optional(),
     _count: z
       .lazy(() => ExtensionsCountOrderByAggregateInputObjectSchema)
       .optional(),

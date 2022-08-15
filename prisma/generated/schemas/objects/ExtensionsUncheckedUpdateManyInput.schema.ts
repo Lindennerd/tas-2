@@ -24,6 +24,12 @@ const Schema: z.ZodType<Prisma.ExtensionsUncheckedUpdateManyInput> = z
         z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
+    questionId: z
+      .union([
+        z.string(),
+        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
   })
   .strict();
 

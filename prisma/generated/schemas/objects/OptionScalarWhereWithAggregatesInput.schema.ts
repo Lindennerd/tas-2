@@ -39,6 +39,9 @@ const Schema: z.ZodType<Prisma.OptionScalarWhereWithAggregatesInput> = z
     default: z
       .union([z.lazy(() => BoolWithAggregatesFilterObjectSchema), z.boolean()])
       .optional(),
+    questionId: z
+      .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
+      .optional(),
   })
   .strict();
 
