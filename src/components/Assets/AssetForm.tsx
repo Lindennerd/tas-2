@@ -7,21 +7,22 @@ import {
   Textarea,
 } from "@vechaiui/react";
 import { useForm } from "react-hook-form";
-
-export type AssetForm = {
-  name: string;
-  description: string;
-  url?: string;
-};
+import { useAssetContext } from "../../context/asset.context";
+import { useAsset } from "../../hooks";
+import { AssetInput } from "../../schemas/asset.schema";
 
 export function AssetForm() {
+  const { addAsset } = useAsset();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AssetForm>();
+  } = useForm<AssetInput>();
 
-  function onSubmit(data: AssetForm) {}
+  async function onSubmit(data: AssetInput) {
+    const newAsset = await addAsset({ ...data });
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
