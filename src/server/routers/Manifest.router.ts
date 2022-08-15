@@ -1,18 +1,17 @@
 import { createRouter } from "./helpers/createRouter";
-import { ManifestFindUniqueSchema } from "../schemas/findUniqueManifest.schema";
-import { ManifestFindFirstSchema } from "../schemas/findFirstManifest.schema";
-import { ManifestFindManySchema } from "../schemas/findManyManifest.schema";
-import { ManifestCreateOneSchema } from "../schemas/createOneManifest.schema";
-import { ManifestDeleteOneSchema } from "../schemas/deleteOneManifest.schema";
-import { ManifestUpdateOneSchema } from "../schemas/updateOneManifest.schema";
-import { ManifestDeleteManySchema } from "../schemas/deleteManyManifest.schema";
-import { ManifestUpdateManySchema } from "../schemas/updateManyManifest.schema";
-import { ManifestUpsertSchema } from "../schemas/upsertOneManifest.schema";
-import { ManifestAggregateSchema } from "../schemas/aggregateManifest.schema";
-import { ManifestGroupBySchema } from "../schemas/groupByManifest.schema";
+import { ManifestFindUniqueSchema } from "../../schemas/findUniqueManifest.schema";
+import { ManifestFindFirstSchema } from "../../schemas/findFirstManifest.schema";
+import { ManifestFindManySchema } from "../../schemas/findManyManifest.schema";
+import { ManifestCreateOneSchema } from "../../schemas/createOneManifest.schema";
+import { ManifestDeleteOneSchema } from "../../schemas/deleteOneManifest.schema";
+import { ManifestUpdateOneSchema } from "../../schemas/updateOneManifest.schema";
+import { ManifestDeleteManySchema } from "../../schemas/deleteManyManifest.schema";
+import { ManifestUpdateManySchema } from "../../schemas/updateManyManifest.schema";
+import { ManifestUpsertSchema } from "../../schemas/upsertOneManifest.schema";
+import { ManifestAggregateSchema } from "../../schemas/aggregateManifest.schema";
+import { ManifestGroupBySchema } from "../../schemas/groupByManifest.schema";
 
 export const manifestsRouter = createRouter()
-
   .query("aggregateManifest", {
     input: ManifestAggregateSchema,
     async resolve({ ctx, input }) {
@@ -24,7 +23,9 @@ export const manifestsRouter = createRouter()
   .mutation("createOneManifest", {
     input: ManifestCreateOneSchema,
     async resolve({ ctx, input }) {
-      const createOneManifest = await ctx.prisma.manifest.create({ data: input.data });
+      const createOneManifest = await ctx.prisma.manifest.create({
+        data: input.data,
+      });
       return createOneManifest;
     },
   })
@@ -40,7 +41,9 @@ export const manifestsRouter = createRouter()
   .mutation("deleteOneManifest", {
     input: ManifestDeleteOneSchema,
     async resolve({ ctx, input }) {
-      const deleteOneManifest = await ctx.prisma.manifest.delete({ where: input.where });
+      const deleteOneManifest = await ctx.prisma.manifest.delete({
+        where: input.where,
+      });
       return deleteOneManifest;
     },
   })
@@ -64,7 +67,9 @@ export const manifestsRouter = createRouter()
   .query("findUniqueManifest", {
     input: ManifestFindUniqueSchema,
     async resolve({ ctx, input }) {
-      const findUniqueManifest = await ctx.prisma.manifest.findUnique({ where: input.where });
+      const findUniqueManifest = await ctx.prisma.manifest.findUnique({
+        where: input.where,
+      });
       return findUniqueManifest;
     },
   })
@@ -72,7 +77,14 @@ export const manifestsRouter = createRouter()
   .query("groupByManifest", {
     input: ManifestGroupBySchema,
     async resolve({ ctx, input }) {
-      const groupByManifest = await ctx.prisma.manifest.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
+      const groupByManifest = await ctx.prisma.manifest.groupBy({
+        where: input.where,
+        orderBy: input.orderBy,
+        by: input.by,
+        having: input.having,
+        take: input.take,
+        skip: input.skip,
+      });
       return groupByManifest;
     },
   })
@@ -88,7 +100,10 @@ export const manifestsRouter = createRouter()
   .mutation("updateOneManifest", {
     input: ManifestUpdateOneSchema,
     async resolve({ ctx, input }) {
-      const updateOneManifest = await ctx.prisma.manifest.update({ where: input.where, data: input.data });
+      const updateOneManifest = await ctx.prisma.manifest.update({
+        where: input.where,
+        data: input.data,
+      });
       return updateOneManifest;
     },
   })
@@ -96,7 +111,11 @@ export const manifestsRouter = createRouter()
   .mutation("upsertOneManifest", {
     input: ManifestUpsertSchema,
     async resolve({ ctx, input }) {
-      const upsertOneManifest = await ctx.prisma.manifest.upsert({ where: input.where, create: input.create, update: input.update });
+      const upsertOneManifest = await ctx.prisma.manifest.upsert({
+        where: input.where,
+        create: input.create,
+        update: input.update,
+      });
       return upsertOneManifest;
     },
-  })
+  });

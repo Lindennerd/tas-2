@@ -1,18 +1,17 @@
 import { createRouter } from "./helpers/createRouter";
-import { SessionFindUniqueSchema } from "../schemas/findUniqueSession.schema";
-import { SessionFindFirstSchema } from "../schemas/findFirstSession.schema";
-import { SessionFindManySchema } from "../schemas/findManySession.schema";
-import { SessionCreateOneSchema } from "../schemas/createOneSession.schema";
-import { SessionDeleteOneSchema } from "../schemas/deleteOneSession.schema";
-import { SessionUpdateOneSchema } from "../schemas/updateOneSession.schema";
-import { SessionDeleteManySchema } from "../schemas/deleteManySession.schema";
-import { SessionUpdateManySchema } from "../schemas/updateManySession.schema";
-import { SessionUpsertSchema } from "../schemas/upsertOneSession.schema";
-import { SessionAggregateSchema } from "../schemas/aggregateSession.schema";
-import { SessionGroupBySchema } from "../schemas/groupBySession.schema";
+import { SessionFindUniqueSchema } from "../../schemas/findUniqueSession.schema";
+import { SessionFindFirstSchema } from "../../schemas/findFirstSession.schema";
+import { SessionFindManySchema } from "../../schemas/findManySession.schema";
+import { SessionCreateOneSchema } from "../../schemas/createOneSession.schema";
+import { SessionDeleteOneSchema } from "../../schemas/deleteOneSession.schema";
+import { SessionUpdateOneSchema } from "../../schemas/updateOneSession.schema";
+import { SessionDeleteManySchema } from "../../schemas/deleteManySession.schema";
+import { SessionUpdateManySchema } from "../../schemas/updateManySession.schema";
+import { SessionUpsertSchema } from "../../schemas/upsertOneSession.schema";
+import { SessionAggregateSchema } from "../../schemas/aggregateSession.schema";
+import { SessionGroupBySchema } from "../../schemas/groupBySession.schema";
 
 export const sessionsRouter = createRouter()
-
   .query("aggregateSession", {
     input: SessionAggregateSchema,
     async resolve({ ctx, input }) {
@@ -24,7 +23,9 @@ export const sessionsRouter = createRouter()
   .mutation("createOneSession", {
     input: SessionCreateOneSchema,
     async resolve({ ctx, input }) {
-      const createOneSession = await ctx.prisma.session.create({ data: input.data });
+      const createOneSession = await ctx.prisma.session.create({
+        data: input.data,
+      });
       return createOneSession;
     },
   })
@@ -40,7 +41,9 @@ export const sessionsRouter = createRouter()
   .mutation("deleteOneSession", {
     input: SessionDeleteOneSchema,
     async resolve({ ctx, input }) {
-      const deleteOneSession = await ctx.prisma.session.delete({ where: input.where });
+      const deleteOneSession = await ctx.prisma.session.delete({
+        where: input.where,
+      });
       return deleteOneSession;
     },
   })
@@ -64,7 +67,9 @@ export const sessionsRouter = createRouter()
   .query("findUniqueSession", {
     input: SessionFindUniqueSchema,
     async resolve({ ctx, input }) {
-      const findUniqueSession = await ctx.prisma.session.findUnique({ where: input.where });
+      const findUniqueSession = await ctx.prisma.session.findUnique({
+        where: input.where,
+      });
       return findUniqueSession;
     },
   })
@@ -72,7 +77,14 @@ export const sessionsRouter = createRouter()
   .query("groupBySession", {
     input: SessionGroupBySchema,
     async resolve({ ctx, input }) {
-      const groupBySession = await ctx.prisma.session.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
+      const groupBySession = await ctx.prisma.session.groupBy({
+        where: input.where,
+        orderBy: input.orderBy,
+        by: input.by,
+        having: input.having,
+        take: input.take,
+        skip: input.skip,
+      });
       return groupBySession;
     },
   })
@@ -88,7 +100,10 @@ export const sessionsRouter = createRouter()
   .mutation("updateOneSession", {
     input: SessionUpdateOneSchema,
     async resolve({ ctx, input }) {
-      const updateOneSession = await ctx.prisma.session.update({ where: input.where, data: input.data });
+      const updateOneSession = await ctx.prisma.session.update({
+        where: input.where,
+        data: input.data,
+      });
       return updateOneSession;
     },
   })
@@ -96,7 +111,11 @@ export const sessionsRouter = createRouter()
   .mutation("upsertOneSession", {
     input: SessionUpsertSchema,
     async resolve({ ctx, input }) {
-      const upsertOneSession = await ctx.prisma.session.upsert({ where: input.where, create: input.create, update: input.update });
+      const upsertOneSession = await ctx.prisma.session.upsert({
+        where: input.where,
+        create: input.create,
+        update: input.update,
+      });
       return upsertOneSession;
     },
-  })
+  });

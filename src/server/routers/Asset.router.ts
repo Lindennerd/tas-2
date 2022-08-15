@@ -1,18 +1,17 @@
 import { createRouter } from "./helpers/createRouter";
-import { AssetFindUniqueSchema } from "../schemas/findUniqueAsset.schema";
-import { AssetFindFirstSchema } from "../schemas/findFirstAsset.schema";
-import { AssetFindManySchema } from "../schemas/findManyAsset.schema";
-import { AssetCreateOneSchema } from "../schemas/createOneAsset.schema";
-import { AssetDeleteOneSchema } from "../schemas/deleteOneAsset.schema";
-import { AssetUpdateOneSchema } from "../schemas/updateOneAsset.schema";
-import { AssetDeleteManySchema } from "../schemas/deleteManyAsset.schema";
-import { AssetUpdateManySchema } from "../schemas/updateManyAsset.schema";
-import { AssetUpsertSchema } from "../schemas/upsertOneAsset.schema";
-import { AssetAggregateSchema } from "../schemas/aggregateAsset.schema";
-import { AssetGroupBySchema } from "../schemas/groupByAsset.schema";
+import { AssetFindUniqueSchema } from "../../schemas/findUniqueAsset.schema";
+import { AssetFindFirstSchema } from "../../schemas/findFirstAsset.schema";
+import { AssetFindManySchema } from "../../schemas/findManyAsset.schema";
+import { AssetCreateOneSchema } from "../../schemas/createOneAsset.schema";
+import { AssetDeleteOneSchema } from "../../schemas/deleteOneAsset.schema";
+import { AssetUpdateOneSchema } from "../../schemas/updateOneAsset.schema";
+import { AssetDeleteManySchema } from "../../schemas/deleteManyAsset.schema";
+import { AssetUpdateManySchema } from "../../schemas/updateManyAsset.schema";
+import { AssetUpsertSchema } from "../../schemas/upsertOneAsset.schema";
+import { AssetAggregateSchema } from "../../schemas/aggregateAsset.schema";
+import { AssetGroupBySchema } from "../../schemas/groupByAsset.schema";
 
 export const assetsRouter = createRouter()
-
   .query("aggregateAsset", {
     input: AssetAggregateSchema,
     async resolve({ ctx, input }) {
@@ -24,7 +23,9 @@ export const assetsRouter = createRouter()
   .mutation("createOneAsset", {
     input: AssetCreateOneSchema,
     async resolve({ ctx, input }) {
-      const createOneAsset = await ctx.prisma.asset.create({ data: input.data });
+      const createOneAsset = await ctx.prisma.asset.create({
+        data: input.data,
+      });
       return createOneAsset;
     },
   })
@@ -40,7 +41,9 @@ export const assetsRouter = createRouter()
   .mutation("deleteOneAsset", {
     input: AssetDeleteOneSchema,
     async resolve({ ctx, input }) {
-      const deleteOneAsset = await ctx.prisma.asset.delete({ where: input.where });
+      const deleteOneAsset = await ctx.prisma.asset.delete({
+        where: input.where,
+      });
       return deleteOneAsset;
     },
   })
@@ -64,7 +67,9 @@ export const assetsRouter = createRouter()
   .query("findUniqueAsset", {
     input: AssetFindUniqueSchema,
     async resolve({ ctx, input }) {
-      const findUniqueAsset = await ctx.prisma.asset.findUnique({ where: input.where });
+      const findUniqueAsset = await ctx.prisma.asset.findUnique({
+        where: input.where,
+      });
       return findUniqueAsset;
     },
   })
@@ -72,7 +77,14 @@ export const assetsRouter = createRouter()
   .query("groupByAsset", {
     input: AssetGroupBySchema,
     async resolve({ ctx, input }) {
-      const groupByAsset = await ctx.prisma.asset.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
+      const groupByAsset = await ctx.prisma.asset.groupBy({
+        where: input.where,
+        orderBy: input.orderBy,
+        by: input.by,
+        having: input.having,
+        take: input.take,
+        skip: input.skip,
+      });
       return groupByAsset;
     },
   })
@@ -88,7 +100,10 @@ export const assetsRouter = createRouter()
   .mutation("updateOneAsset", {
     input: AssetUpdateOneSchema,
     async resolve({ ctx, input }) {
-      const updateOneAsset = await ctx.prisma.asset.update({ where: input.where, data: input.data });
+      const updateOneAsset = await ctx.prisma.asset.update({
+        where: input.where,
+        data: input.data,
+      });
       return updateOneAsset;
     },
   })
@@ -96,7 +111,11 @@ export const assetsRouter = createRouter()
   .mutation("upsertOneAsset", {
     input: AssetUpsertSchema,
     async resolve({ ctx, input }) {
-      const upsertOneAsset = await ctx.prisma.asset.upsert({ where: input.where, create: input.create, update: input.update });
+      const upsertOneAsset = await ctx.prisma.asset.upsert({
+        where: input.where,
+        create: input.create,
+        update: input.update,
+      });
       return upsertOneAsset;
     },
-  })
+  });

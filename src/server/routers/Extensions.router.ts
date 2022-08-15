@@ -1,18 +1,17 @@
 import { createRouter } from "./helpers/createRouter";
-import { ExtensionsFindUniqueSchema } from "../schemas/findUniqueExtensions.schema";
-import { ExtensionsFindFirstSchema } from "../schemas/findFirstExtensions.schema";
-import { ExtensionsFindManySchema } from "../schemas/findManyExtensions.schema";
-import { ExtensionsCreateOneSchema } from "../schemas/createOneExtensions.schema";
-import { ExtensionsDeleteOneSchema } from "../schemas/deleteOneExtensions.schema";
-import { ExtensionsUpdateOneSchema } from "../schemas/updateOneExtensions.schema";
-import { ExtensionsDeleteManySchema } from "../schemas/deleteManyExtensions.schema";
-import { ExtensionsUpdateManySchema } from "../schemas/updateManyExtensions.schema";
-import { ExtensionsUpsertSchema } from "../schemas/upsertOneExtensions.schema";
-import { ExtensionsAggregateSchema } from "../schemas/aggregateExtensions.schema";
-import { ExtensionsGroupBySchema } from "../schemas/groupByExtensions.schema";
+import { ExtensionsFindUniqueSchema } from "../../schemas/findUniqueExtensions.schema";
+import { ExtensionsFindFirstSchema } from "../../schemas/findFirstExtensions.schema";
+import { ExtensionsFindManySchema } from "../../schemas/findManyExtensions.schema";
+import { ExtensionsCreateOneSchema } from "../../schemas/createOneExtensions.schema";
+import { ExtensionsDeleteOneSchema } from "../../schemas/deleteOneExtensions.schema";
+import { ExtensionsUpdateOneSchema } from "../../schemas/updateOneExtensions.schema";
+import { ExtensionsDeleteManySchema } from "../../schemas/deleteManyExtensions.schema";
+import { ExtensionsUpdateManySchema } from "../../schemas/updateManyExtensions.schema";
+import { ExtensionsUpsertSchema } from "../../schemas/upsertOneExtensions.schema";
+import { ExtensionsAggregateSchema } from "../../schemas/aggregateExtensions.schema";
+import { ExtensionsGroupBySchema } from "../../schemas/groupByExtensions.schema";
 
 export const extensionsRouter = createRouter()
-
   .query("aggregateExtensions", {
     input: ExtensionsAggregateSchema,
     async resolve({ ctx, input }) {
@@ -24,7 +23,9 @@ export const extensionsRouter = createRouter()
   .mutation("createOneExtensions", {
     input: ExtensionsCreateOneSchema,
     async resolve({ ctx, input }) {
-      const createOneExtensions = await ctx.prisma.extensions.create({ data: input.data });
+      const createOneExtensions = await ctx.prisma.extensions.create({
+        data: input.data,
+      });
       return createOneExtensions;
     },
   })
@@ -32,7 +33,9 @@ export const extensionsRouter = createRouter()
   .mutation("deleteManyExtensions", {
     input: ExtensionsDeleteManySchema,
     async resolve({ ctx, input }) {
-      const deleteManyExtensions = await ctx.prisma.extensions.deleteMany(input);
+      const deleteManyExtensions = await ctx.prisma.extensions.deleteMany(
+        input
+      );
       return deleteManyExtensions;
     },
   })
@@ -40,7 +43,9 @@ export const extensionsRouter = createRouter()
   .mutation("deleteOneExtensions", {
     input: ExtensionsDeleteOneSchema,
     async resolve({ ctx, input }) {
-      const deleteOneExtensions = await ctx.prisma.extensions.delete({ where: input.where });
+      const deleteOneExtensions = await ctx.prisma.extensions.delete({
+        where: input.where,
+      });
       return deleteOneExtensions;
     },
   })
@@ -64,7 +69,9 @@ export const extensionsRouter = createRouter()
   .query("findUniqueExtensions", {
     input: ExtensionsFindUniqueSchema,
     async resolve({ ctx, input }) {
-      const findUniqueExtensions = await ctx.prisma.extensions.findUnique({ where: input.where });
+      const findUniqueExtensions = await ctx.prisma.extensions.findUnique({
+        where: input.where,
+      });
       return findUniqueExtensions;
     },
   })
@@ -72,7 +79,14 @@ export const extensionsRouter = createRouter()
   .query("groupByExtensions", {
     input: ExtensionsGroupBySchema,
     async resolve({ ctx, input }) {
-      const groupByExtensions = await ctx.prisma.extensions.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
+      const groupByExtensions = await ctx.prisma.extensions.groupBy({
+        where: input.where,
+        orderBy: input.orderBy,
+        by: input.by,
+        having: input.having,
+        take: input.take,
+        skip: input.skip,
+      });
       return groupByExtensions;
     },
   })
@@ -80,7 +94,9 @@ export const extensionsRouter = createRouter()
   .mutation("updateManyExtensions", {
     input: ExtensionsUpdateManySchema,
     async resolve({ ctx, input }) {
-      const updateManyExtensions = await ctx.prisma.extensions.updateMany(input);
+      const updateManyExtensions = await ctx.prisma.extensions.updateMany(
+        input
+      );
       return updateManyExtensions;
     },
   })
@@ -88,7 +104,10 @@ export const extensionsRouter = createRouter()
   .mutation("updateOneExtensions", {
     input: ExtensionsUpdateOneSchema,
     async resolve({ ctx, input }) {
-      const updateOneExtensions = await ctx.prisma.extensions.update({ where: input.where, data: input.data });
+      const updateOneExtensions = await ctx.prisma.extensions.update({
+        where: input.where,
+        data: input.data,
+      });
       return updateOneExtensions;
     },
   })
@@ -96,7 +115,11 @@ export const extensionsRouter = createRouter()
   .mutation("upsertOneExtensions", {
     input: ExtensionsUpsertSchema,
     async resolve({ ctx, input }) {
-      const upsertOneExtensions = await ctx.prisma.extensions.upsert({ where: input.where, create: input.create, update: input.update });
+      const upsertOneExtensions = await ctx.prisma.extensions.upsert({
+        where: input.where,
+        create: input.create,
+        update: input.update,
+      });
       return upsertOneExtensions;
     },
-  })
+  });

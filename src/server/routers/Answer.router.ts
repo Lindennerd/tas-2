@@ -1,18 +1,17 @@
 import { createRouter } from "./helpers/createRouter";
-import { AnswerFindUniqueSchema } from "../schemas/findUniqueAnswer.schema";
-import { AnswerFindFirstSchema } from "../schemas/findFirstAnswer.schema";
-import { AnswerFindManySchema } from "../schemas/findManyAnswer.schema";
-import { AnswerCreateOneSchema } from "../schemas/createOneAnswer.schema";
-import { AnswerDeleteOneSchema } from "../schemas/deleteOneAnswer.schema";
-import { AnswerUpdateOneSchema } from "../schemas/updateOneAnswer.schema";
-import { AnswerDeleteManySchema } from "../schemas/deleteManyAnswer.schema";
-import { AnswerUpdateManySchema } from "../schemas/updateManyAnswer.schema";
-import { AnswerUpsertSchema } from "../schemas/upsertOneAnswer.schema";
-import { AnswerAggregateSchema } from "../schemas/aggregateAnswer.schema";
-import { AnswerGroupBySchema } from "../schemas/groupByAnswer.schema";
+import { AnswerFindUniqueSchema } from "../../schemas/findUniqueAnswer.schema";
+import { AnswerFindFirstSchema } from "../../schemas/findFirstAnswer.schema";
+import { AnswerFindManySchema } from "../../schemas/findManyAnswer.schema";
+import { AnswerCreateOneSchema } from "../../schemas/createOneAnswer.schema";
+import { AnswerDeleteOneSchema } from "../../schemas/deleteOneAnswer.schema";
+import { AnswerUpdateOneSchema } from "../../schemas/updateOneAnswer.schema";
+import { AnswerDeleteManySchema } from "../../schemas/deleteManyAnswer.schema";
+import { AnswerUpdateManySchema } from "../../schemas/updateManyAnswer.schema";
+import { AnswerUpsertSchema } from "../../schemas/upsertOneAnswer.schema";
+import { AnswerAggregateSchema } from "../../schemas/aggregateAnswer.schema";
+import { AnswerGroupBySchema } from "../../schemas/groupByAnswer.schema";
 
 export const answersRouter = createRouter()
-
   .query("aggregateAnswer", {
     input: AnswerAggregateSchema,
     async resolve({ ctx, input }) {
@@ -24,7 +23,9 @@ export const answersRouter = createRouter()
   .mutation("createOneAnswer", {
     input: AnswerCreateOneSchema,
     async resolve({ ctx, input }) {
-      const createOneAnswer = await ctx.prisma.answer.create({ data: input.data });
+      const createOneAnswer = await ctx.prisma.answer.create({
+        data: input.data,
+      });
       return createOneAnswer;
     },
   })
@@ -40,7 +41,9 @@ export const answersRouter = createRouter()
   .mutation("deleteOneAnswer", {
     input: AnswerDeleteOneSchema,
     async resolve({ ctx, input }) {
-      const deleteOneAnswer = await ctx.prisma.answer.delete({ where: input.where });
+      const deleteOneAnswer = await ctx.prisma.answer.delete({
+        where: input.where,
+      });
       return deleteOneAnswer;
     },
   })
@@ -64,7 +67,9 @@ export const answersRouter = createRouter()
   .query("findUniqueAnswer", {
     input: AnswerFindUniqueSchema,
     async resolve({ ctx, input }) {
-      const findUniqueAnswer = await ctx.prisma.answer.findUnique({ where: input.where });
+      const findUniqueAnswer = await ctx.prisma.answer.findUnique({
+        where: input.where,
+      });
       return findUniqueAnswer;
     },
   })
@@ -72,7 +77,14 @@ export const answersRouter = createRouter()
   .query("groupByAnswer", {
     input: AnswerGroupBySchema,
     async resolve({ ctx, input }) {
-      const groupByAnswer = await ctx.prisma.answer.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
+      const groupByAnswer = await ctx.prisma.answer.groupBy({
+        where: input.where,
+        orderBy: input.orderBy,
+        by: input.by,
+        having: input.having,
+        take: input.take,
+        skip: input.skip,
+      });
       return groupByAnswer;
     },
   })
@@ -88,7 +100,10 @@ export const answersRouter = createRouter()
   .mutation("updateOneAnswer", {
     input: AnswerUpdateOneSchema,
     async resolve({ ctx, input }) {
-      const updateOneAnswer = await ctx.prisma.answer.update({ where: input.where, data: input.data });
+      const updateOneAnswer = await ctx.prisma.answer.update({
+        where: input.where,
+        data: input.data,
+      });
       return updateOneAnswer;
     },
   })
@@ -96,7 +111,11 @@ export const answersRouter = createRouter()
   .mutation("upsertOneAnswer", {
     input: AnswerUpsertSchema,
     async resolve({ ctx, input }) {
-      const upsertOneAnswer = await ctx.prisma.answer.upsert({ where: input.where, create: input.create, update: input.update });
+      const upsertOneAnswer = await ctx.prisma.answer.upsert({
+        where: input.where,
+        create: input.create,
+        update: input.update,
+      });
       return upsertOneAnswer;
     },
-  })
+  });
