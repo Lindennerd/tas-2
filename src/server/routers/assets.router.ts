@@ -1,4 +1,7 @@
-import { assetInputSchema } from "./../../schemas/asset.schema";
+import {
+  assetInputSchema,
+  assetEditSchema,
+} from "./../../schemas/asset.schema";
 import { createRouter } from "../context/context";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
@@ -49,6 +52,15 @@ export const assetRouter = createRouter()
             },
           },
         },
+      });
+    },
+  })
+  .mutation("edit", {
+    input: assetEditSchema,
+    async resolve({ ctx, input }) {
+      return ctx.prisma.asset.update({
+        where: { id: input.id },
+        data: input,
       });
     },
   });

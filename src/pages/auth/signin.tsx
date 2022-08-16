@@ -1,9 +1,9 @@
-//import LoginLayout from "@/components/LoginLayout";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getCsrfToken, getProviders } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactNode } from "react";
+import { LoginLayout } from "../../components/Layouts";
 
 export default function SignIn({
   csrfToken,
@@ -98,6 +98,6 @@ export async function getServerSideProps(context: CtxOrReq) {
   };
 }
 
-// SignIn.getLayout = function getLayout(page: ReactNode) {
-//   return <LoginLayout>{page}</LoginLayout>;
-// };
+SignIn.getLayout = function getLayout(page: ReactNode) {
+  return <LoginLayout>{page}</LoginLayout>;
+};

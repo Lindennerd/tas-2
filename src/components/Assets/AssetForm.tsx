@@ -8,20 +8,21 @@ import {
 } from "@vechaiui/react";
 import { useForm } from "react-hook-form";
 import { useAssetContext } from "../../context/asset.context";
-import { useAsset } from "../../hooks";
 import { AssetInput } from "../../schemas/asset.schema";
 
 export function AssetForm() {
-  const { addAsset } = useAsset();
+  const context = useAssetContext();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AssetInput>();
+  } = useForm<AssetInput>({
+    defaultValues: { ...context.asset, url: context.asset?.url ?? "" },
+  });
 
   async function onSubmit(data: AssetInput) {
-    const newAsset = await addAsset({ ...data });
+    await context.mutate({ ...data });
   }
 
   return (
@@ -57,7 +58,12 @@ export function AssetForm() {
         />
       </FormControl>
 
-      <Button type="submit" variant="solid" color="primary">
+      <Button
+        type="submit"
+        variant="solid"
+        color="primary"
+        loading={context.isLoading}
+      >
         Salvar
       </Button>
     </form>
