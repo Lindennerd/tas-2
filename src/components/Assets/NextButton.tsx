@@ -1,4 +1,4 @@
-import { Button, Icon } from "@vechaiui/react";
+import { Button } from "@material-tailwind/react";
 import { BiSkipNext } from "react-icons/bi";
 import { useAssetContext } from "../../context/asset.context";
 
@@ -8,13 +8,10 @@ export function NextButton() {
   return (
     <Button
       disabled={!context.asset}
-      color="primary"
-      variant="outline"
-      rightIcon={
-        <Icon as={BiSkipNext} label="Avançar" className="ml-2 text-lg" />
-      }
+      variant="outlined"
+      className="p-2 flex items-center"
     >
-      Avançar
+      <span> Avançar</span> <BiSkipNext className="text-lg" />
     </Button>
   );
 }
