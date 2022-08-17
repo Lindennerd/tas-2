@@ -5,12 +5,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator trpc {
-  provider       = "prisma-trpc-generator"
-  withMiddleware = true
-  withShield     = false
-  contextPath    = "../src/server/router/context.ts"
-}
+// generator trpc {
+//   provider       = "prisma-trpc-generator"
+//   withMiddleware = true
+//   withShield     = false
+//   contextPath    = "../src/server/router/context.ts"
+// }
 
 // generator erd {
 //   provider = "prisma-erd-generator"
@@ -67,6 +67,8 @@ model User {
   Attachment     Attachment[]
   Answer         Answer[]
   Comment        Comment[]
+  Document       Document[]
+  DocumentUpdate DocumentUpdate[]
 }
 
 model VerificationToken {
@@ -135,6 +137,8 @@ model Section {
   questions   Question[]
   Manifest    Manifest?  @relation(fields: [manifestId], references: [id])
   manifestId  String?
+  Document    Document?  @relation(fields: [documentId], references: [id])
+  documentId  String?
 }
 
 model Manifest {
@@ -193,4 +197,24 @@ model Comment {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+}
+
+model Document {
+  id             String           @id @default(cuid())
+  name           String
+  description    String
+  userId         String
+  creator        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime         @default(now())
+  sections       Section[]
+  DocumentUpdate DocumentUpdate[]
+}
+
+model DocumentUpdate {
+  id         String   @id @default(cuid())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  updatedAt  DateTime @default(now())
 }

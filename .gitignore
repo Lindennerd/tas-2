@@ -41,4 +41,5 @@ yarn-error.log*
 
 
 /prisma/generated
+db.sqlite3-journal
 db.sqlite3
