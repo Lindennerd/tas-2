@@ -4,14 +4,15 @@ import { getCsrfToken, getProviders } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactNode } from "react";
+import { LoginLayout } from "../../components/Layouts";
 
-export default function SignIn({
+const SignIn = ({
   csrfToken,
   providers,
 }: {
   csrfToken: string;
   providers: any;
-}) {
+}) => {
   return (
     <div className="flex flex-col justify-center items-center justify-items-center space-y-5">
       <Head>
@@ -88,7 +89,11 @@ export default function SignIn({
       </div>
     </div>
   );
-}
+};
+
+SignIn.getLayout = function getLayout(page: ReactNode) {
+  return <LoginLayout>{page}</LoginLayout>;
+};
 
 export async function getServerSideProps(context: CtxOrReq) {
   const csrfToken = await getCsrfToken(context);
@@ -98,6 +103,4 @@ export async function getServerSideProps(context: CtxOrReq) {
   };
 }
 
-// SignIn.getLayout = function getLayout(page: ReactNode) {
-//   return <LoginLayout>{page}</LoginLayout>;
-// };
+export default SignIn;

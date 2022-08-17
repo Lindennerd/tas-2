@@ -1,4 +1,5 @@
-// src/pages/_app.tsx
+import { AppProps } from "next/app";
+
 import { withTRPC } from "@trpc/next";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
@@ -12,23 +13,37 @@ import { AuthContextProvider } from "../context/auth.context";
 import { MainLayout } from "../components/Layouts";
 
 import theme from "../theme/vecha.theme";
+import { ReactElement, ReactNode } from "react";
+import { NextPage } from "next";
 
-const MyApp: AppType = ({
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp: AppType = (({
   Component,
   pageProps: { session, ...pageProps },
-}) => {
-  return (
-    <SessionProvider session={session}>
-      <VechaiProvider theme={theme} colorScheme="cool">
-        <AuthContextProvider>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        </AuthContextProvider>
-      </VechaiProvider>
-    </SessionProvider>
-  );
-};
+}: AppPropsWithLayout) => {
+  const getLayout =
+    Component.getLayout ??
+    ((page) => (
+      <SessionProvider session={session}>
+        <VechaiProvider theme={theme} colorScheme="cool">
+          <AuthContextProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </AuthContextProvider>
+        </VechaiProvider>
+      </SessionProvider>
+    ));
+
+  return getLayout(<Component {...pageProps} />);
+}) as AppType;
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
