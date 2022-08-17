@@ -1,4 +1,4 @@
-import { Button, Icon } from "@vechaiui/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { BiAddToQueue } from "react-icons/bi";
@@ -25,13 +25,11 @@ export function AssetList() {
           onClick={() => {
             router.push("/assets/new");
           }}
-          variant="solid"
-          color="primary"
-          leftIcon={
-            <Icon as={BiAddToQueue} label="Novo Ativo" className="mr-2" />
-          }
+          className="p-2 space-x-1 flex items-center whitespace-nowrap"
+          color="green"
         >
-          Novo Ativo
+          <BiAddToQueue className="text-2xl" />
+          <span>Novo Ativo</span>
         </Button>
       </div>
       <div>Assets</div>

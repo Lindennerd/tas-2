@@ -8,7 +8,7 @@ export function LoginLayout({ children }: { children: React.ReactNode }) {
         <title>TAS</title>
       </Head>
 
-      <main className="pt-14 pl-14">{children}</main>
+      <main className="pt-20">{children}</main>
     </div>
   );
 }

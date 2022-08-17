@@ -1,22 +1,19 @@
 /** @type {import('tailwindcss').Config} */
+const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = {
+module.exports = withMT({
   mode: "jit",
-  content: ["./src/**/*.{js,ts,jsx,tsx}", "./node_modules/@vechaiui/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        ofcprimary: '#3f51b5',
-        ofcsecondary: '#2C4E7F',
-        success: '#4caf50',
+        primary: '#3f51b5',
+        secondary: '#2C4E7F'
       }
     },
   },
     plugins: [
-    require("@tailwindcss/forms"),
-      require("@vechaiui/core")({
-        color: ["ofcprimary", "ofcsecondary", "success"],
-    })
+
   ],
-};
+});

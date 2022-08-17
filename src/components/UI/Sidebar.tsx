@@ -6,7 +6,7 @@ export function Sidebar() {
   const { data: session } = useSession();
 
   return (
-    <div className="fixed z-10 bg-ofcsecondary top-12 w-12 h-full text-white hover:w-40 hover:transition-[width] duration-500 ">
+    <div className="fixed z-10 bg-secondary top-12 w-12 h-full text-white hover:w-40 hover:transition-[width] duration-500 ">
       <Link href="/documents">
         <a className="flex justify-start p-2 w-full overflow-hidden hover:bg-primary hover:border-l-white hover:border-l-2">
           <TiDocument className="text-2xl min-w-[32px]" />

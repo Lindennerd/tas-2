@@ -1,4 +1,13 @@
 //import LoginLayout from "@/components/LoginLayout";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Input,
+  Typography,
+} from "@material-tailwind/react";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getCsrfToken, getProviders } from "next-auth/react";
 import Head from "next/head";
@@ -14,10 +23,7 @@ const SignIn = ({
   providers: any;
 }) => {
   return (
-    <div className="flex flex-col justify-center items-center justify-items-center space-y-5">
-      <Head>
-        <title>TAS</title>
-      </Head>
+    <>
       <div className="flex flex-col items-center">
         <a className="rounded-full border p-4 bg-primary h-20 w-20 shadow-lg">
           <Image
@@ -30,64 +36,41 @@ const SignIn = ({
         </a>
         <h1 className="font-semibold">TAS - Termo de Aceite de Suporte</h1>
       </div>
+      <div className="flex space-x-4 items-center justify-center">
+        <form method="post" action="/api/auth/signin/ldap">
+          <Card>
+            <CardBody>
+              <Typography variant="h5" className="mb-2 text-center">
+                LDAP
+              </Typography>
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+              <div className="space-y-2">
+                <Input label="Usuário" name="username" />
+                <Input label="Senha" name="password" type={"password"}></Input>
+              </div>
+            </CardBody>
+            <CardFooter divider>
+              <Button type="submit">Entrar</Button>
+            </CardFooter>
+          </Card>
+        </form>
 
-      <div className="flex flex-col items-center justify-center">
-        <h1>LDAP Login</h1>
-        <form
-          method="post"
-          action="/api/auth/signin/ldap"
-          className="p-2 border rounded-md flex flex-col justify-center items-center space-y-4 shadow-md"
-        >
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          <div className="flex space-x-2 items-center">
-            <label className="text-center">Usuário</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="form-control"
-            />
-          </div>
-          <div className="flex space-x-2 items-center">
-            <label className="text-center">Senha</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="form-control"
-            />
-          </div>
-          <button type="submit" className="btn-primary">
-            Login
-          </button>
+        <form method="post" action="/api/auth/signin/email">
+          <Card>
+            <CardBody>
+              <Typography variant="h5" className="mb-2 text-center">
+                Email
+              </Typography>
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+              <Input label="Email" name="email" />
+            </CardBody>
+            <CardFooter divider>
+              <Button type="submit">Enviar Email</Button>
+            </CardFooter>
+          </Card>
         </form>
       </div>
-
-      <hr className="border-2" />
-
-      <div className="flex flex-col items-center justify-center">
-        <h1>Email One Time Password</h1>
-        <form
-          method="post"
-          action="/api/auth/signin/email"
-          className="p-2 border rounded-md flex flex-col justify-center items-center space-y-4 shadow-md"
-        >
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          <div className="flex space-x-2 items-center">
-            <label className="text-center">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="form-control"
-            />
-          </div>
-          <button type="submit" className="btn-primary">
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+    </>
   );
 };
 

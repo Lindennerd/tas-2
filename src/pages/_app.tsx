@@ -8,11 +8,9 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import { VechaiProvider } from "@vechaiui/react";
 import { AuthContextProvider } from "../context/auth.context";
 import { MainLayout } from "../components/Layouts";
 
-import theme from "../theme/vecha.theme";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 
@@ -32,13 +30,11 @@ const MyApp: AppType = (({
     Component.getLayout ??
     ((page) => (
       <SessionProvider session={session}>
-        <VechaiProvider theme={theme} colorScheme="cool">
-          <AuthContextProvider>
-            <MainLayout>
-              <Component {...pageProps} />
-            </MainLayout>
-          </AuthContextProvider>
-        </VechaiProvider>
+        <AuthContextProvider>
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        </AuthContextProvider>
       </SessionProvider>
     ));
 
