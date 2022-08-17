@@ -1,3 +1,4 @@
+import "../styles/globals.css";
 import { AppProps } from "next/app";
 
 import { withTRPC } from "@trpc/next";
@@ -7,8 +8,9 @@ import type { AppRouter } from "../server/context/";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
-import "../styles/globals.css";
 import { AuthContextProvider } from "../context/auth.context";
+import { ThemeProvider } from "@material-tailwind/react";
+import kpmgTheme from "../theme/kpmg-theme";
 import { MainLayout } from "../components/Layouts";
 
 import { ReactElement, ReactNode } from "react";
@@ -32,7 +34,9 @@ const MyApp: AppType = (({
       <SessionProvider session={session}>
         <AuthContextProvider>
           <MainLayout>
-            <Component {...pageProps} />
+            <ThemeProvider value={kpmgTheme}>
+              <Component {...pageProps} />
+            </ThemeProvider>
           </MainLayout>
         </AuthContextProvider>
       </SessionProvider>

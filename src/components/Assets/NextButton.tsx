@@ -11,7 +11,7 @@ export function NextButton() {
       variant="outlined"
       className="p-2 flex items-center"
     >
-      <span> Avançar</span> <BiSkipNext className="text-lg" />
+      <span> Avançar</span> <BiSkipNext className="text-2xl" />
     </Button>
   );
 }
