@@ -30,7 +30,7 @@ export function DocumentContextProvider({
   const [enableGetDocument, setEnableGetDocument] = useState(true);
   const [idDocument, setIdDocument] = useState("");
   const { isLoading } = trpc.useQuery(
-    ["documents.findOne", { id: idDocument }],
+    ["documents.findFirst", { id: idDocument }],
     {
       enabled: enableGetDocument,
       onSuccess: (document: Document) => {

@@ -79,7 +79,7 @@ export const documentRouter = createRouter()
       });
     },
   })
-  .query("findOne", {
+  .query("findFirst", {
     input: z.object({ id: z.string() }),
     async resolve({ ctx, input }): Promise<Document | null> {
       return ctx.prisma.document.findFirst({

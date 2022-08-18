@@ -9,9 +9,13 @@ export function useAssets() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [enableGetAsset, setEnableGetAsset] = useState(false);
+  const [asset, setAsset] = useState<Asset | null>(null);
+  const [idAsset, setIdAsset] = useState("");
+
   const createAsset = trpc.useMutation(["assets.create"]);
   const editAsset = trpc.useMutation(["assets.edit"]);
-  const { isLoading } = trpc.useQuery(
+  const { isLoading: isLoadingAssets } = trpc.useQuery(
     ["assets.findMany", { filter: filterParam }],
     {
       enabled: enableGetAssets,
@@ -23,9 +27,22 @@ export function useAssets() {
     }
   );
 
+  const { isLoading: isLoadingAsset } = trpc.useQuery(
+    ["assets.findFirst", { id: idAsset }],
+    {
+      enabled: enableGetAsset,
+      onSuccess: (asset: Asset) => {
+        setAsset(asset);
+        setEnableGetAsset(false);
+        setLoading(false);
+      },
+    }
+  );
+
   return {
     loading,
     assets,
+    asset,
     addAsset: async (asset: AssetInput) => {
       return await createAsset.mutateAsync(asset);
     },
@@ -39,8 +56,18 @@ export function useAssets() {
       setEnableGetAssets(true);
       setLoading(true);
 
-      if (!isLoading) {
+      if (!isLoadingAssets) {
         return assets;
+      }
+    },
+
+    getAsset: async (id: string) => {
+      setIdAsset(id);
+      setEnableGetAsset(true);
+      setLoading(true);
+
+      if (!isLoadingAsset) {
+        return asset;
       }
     },
   };

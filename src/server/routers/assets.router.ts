@@ -83,6 +83,7 @@ export const assetRouter = createRouter()
             },
           },
         },
+        select: assetSelect,
       });
     },
   })
@@ -92,6 +93,7 @@ export const assetRouter = createRouter()
       const editted = await ctx.prisma.asset.update({
         where: { id: input.id },
         data: input,
+        select: assetSelect,
       });
 
       await ctx.prisma.assetUpdate.create({
