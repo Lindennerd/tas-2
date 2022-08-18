@@ -42,7 +42,7 @@ export function AssetForm() {
         />
       </div>
 
-      <Button type="submit" variant="solid" color="primary">
+      <Button type="submit" variant="filled">
         Salvar
       </Button>
     </form>

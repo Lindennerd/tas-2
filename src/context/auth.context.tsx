@@ -1,3 +1,4 @@
+import Loading from "@/components/UI/Loading";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext, useEffect } from "react";
@@ -19,7 +20,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{}}>
-      {status === "loading" ? <div>Carregando</div> : children}
+      {status === "loading" ? <Loading /> : children}
     </AuthContext.Provider>
   );
 }

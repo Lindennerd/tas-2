@@ -1,21 +1,64 @@
-import { Typography } from "@material-tailwind/react";
+import {
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsBody,
+  TabsHeader,
+  Typography,
+} from "@material-tailwind/react";
 import { NextPage } from "next";
-import { AssetForm, NextButton } from "../../components/Assets";
+import { useState } from "react";
+import { AssetForm } from "../../components/Assets";
 import { AssetContextProvider } from "../../context/asset.context";
 
+interface Step {
+  label: string;
+  value: string;
+  component: React.ReactNode;
+}
+
 const NewAsset: NextPage = () => {
+  const steps: Step[] = [
+    {
+      label: "Informações Básicas",
+      value: "asset-details",
+      component: <AssetForm />,
+    },
+    {
+      label: "Manifesto",
+      value: "manifest",
+      component: <div>Manifest</div>,
+    },
+  ];
+
   return (
     <AssetContextProvider>
-      <div className="p-8">
+      <div className="p-8 space-y-2">
         <Typography variant="h5" className="mb-2 text-center">
-          Novo Ativo
+          Cadastro de Novo Ativo
         </Typography>
-        <div className="border rounded-b-md p-2">
-          <AssetForm />
-        </div>
-        <div className="flex justify-end mt-2">
-          <NextButton />
-        </div>
+
+        <Tabs value="asset-details">
+          <TabsHeader>
+            {steps.map((step) => (
+              <Tab key={step.value} value={step.value}>
+                {step.label}
+              </Tab>
+            ))}
+          </TabsHeader>
+          <TabsBody
+            animate={{
+              mount: { y: 0 },
+              unmount: { y: 250 },
+            }}
+          >
+            {steps.map((step) => (
+              <TabPanel key={step.value} value={step.value} className="mt-6">
+                {step.component}
+              </TabPanel>
+            ))}
+          </TabsBody>
+        </Tabs>
       </div>
     </AssetContextProvider>
   );
