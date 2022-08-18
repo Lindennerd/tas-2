@@ -1,11 +1,11 @@
-import { Asset } from "@prisma/client";
-import { createContext, useContext, useState } from "react";
-import { useAsset } from "../hooks";
+import { Asset } from "../schemas/asset.schema";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useAssets } from "../hooks";
 import { AssetInput } from "../schemas/asset.schema";
 import { trpc } from "../utils/trpc";
 
 interface IAssetContext {
-  asset: Asset;
+  asset: Asset | null;
   isLoading: boolean;
   get: (id: string) => void;
   mutate: (asset: AssetInput) => Promise<void>;
@@ -29,40 +29,36 @@ export function AssetContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [asset, setAsset] = useState<Asset>({} as Asset);
-  const [enableGetAsset, setEnableGetAsset] = useState(true);
+  const [asset, setAsset] = useState<Asset | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { addAsset, editAsset } = useAsset();
-
-  const { isLoading } = trpc.useQuery(["assets.findFirst", { id: "" }], {
-    enabled: enableGetAsset,
-    onSuccess: (asset: Asset) => {
-      setAsset(asset!);
-      setEnableGetAsset(false);
-    },
-  });
-
-  const [loading, setLoading] = useState(isLoading);
+  const { addAsset, editAsset, asset: fAsset, getAsset, loading } = useAssets();
 
   function get(id: string) {
-    setEnableGetAsset(true);
+    getAsset(id);
   }
 
+  useEffect(() => {
+    setAsset(fAsset);
+  }, [loading]);
+
   async function mutate(mutatingAsset: AssetInput) {
-    setLoading(true);
+    setIsLoading(true);
     if (!asset) {
       const newAsset = await addAsset(mutatingAsset);
       setAsset(newAsset);
-      setLoading(false);
+      setIsLoading(false);
     } else {
       const edittedAsset = await editAsset({ ...mutatingAsset, id: asset.id });
       setAsset(edittedAsset);
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
   return (
-    <AssetContext.Provider value={{ asset, isLoading: loading, get, mutate }}>
+    <AssetContext.Provider
+      value={{ asset, isLoading: loading && isLoading, get, mutate }}
+    >
       {children}
     </AssetContext.Provider>
   );

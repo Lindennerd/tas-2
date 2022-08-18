@@ -16,6 +16,9 @@ import { MainLayout } from "../components/Layouts";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 
+import { ThemeProvider } from "@material-tailwind/react";
+import theme from "../theme/kpmg-theme";
+
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -34,9 +37,7 @@ const MyApp: AppType = (({
       <SessionProvider session={session}>
         <AuthContextProvider>
           <MainLayout>
-            <ThemeProvider value={kpmgTheme}>
-              <Component {...pageProps} />
-            </ThemeProvider>
+            <Component {...pageProps} />
           </MainLayout>
         </AuthContextProvider>
       </SessionProvider>

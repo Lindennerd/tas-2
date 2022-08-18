@@ -19,7 +19,7 @@ export function Filter(props: FilterProps) {
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit(onSubmit)} className="flex space-x-1">
-        <Input label="Filtre aqui" />
+        <Input label="Filtre aqui" {...register("filter")} />
         <Button variant="outlined" className="p-2" type="submit">
           <BiSearch className="text-lg" />
         </Button>
