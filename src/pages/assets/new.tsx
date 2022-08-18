@@ -1,3 +1,5 @@
+import { ManifestForm } from "@/components/Manifests/ManifestForm";
+import { TabsComponent } from "@/components/UI";
 import {
   Tab,
   TabPanel,
@@ -11,56 +13,41 @@ import { useState } from "react";
 import { AssetForm } from "../../components/Assets";
 import { AssetContextProvider } from "../../context/asset.context";
 
-interface Step {
+interface Tab {
   label: string;
   value: string;
   component: React.ReactNode;
 }
 
 const NewAsset: NextPage = () => {
-  const steps: Step[] = [
+  const tabs: Tab[] = [
     {
       label: "Informações Básicas",
       value: "asset-details",
-      component: <AssetForm />,
+      component: (
+        <AssetContextProvider>
+          <AssetForm />
+        </AssetContextProvider>
+      ),
     },
     {
       label: "Manifesto",
       value: "manifest",
-      component: <div>Manifest</div>,
+      component: (
+        <AssetContextProvider>
+          <ManifestForm />
+        </AssetContextProvider>
+      ),
     },
   ];
 
   return (
-    <AssetContextProvider>
-      <div className="p-8 space-y-2">
-        <Typography variant="h5" className="mb-2 text-center">
-          Cadastro de Novo Ativo
-        </Typography>
-
-        <Tabs value="asset-details">
-          <TabsHeader>
-            {steps.map((step) => (
-              <Tab key={step.value} value={step.value}>
-                {step.label}
-              </Tab>
-            ))}
-          </TabsHeader>
-          <TabsBody
-            animate={{
-              mount: { y: 0 },
-              unmount: { y: 250 },
-            }}
-          >
-            {steps.map((step) => (
-              <TabPanel key={step.value} value={step.value} className="mt-6">
-                {step.component}
-              </TabPanel>
-            ))}
-          </TabsBody>
-        </Tabs>
-      </div>
-    </AssetContextProvider>
+    <div className="p-8 space-y-2">
+      <Typography variant="h5" className="mb-2 text-center">
+        Cadastro de Novo Ativo
+      </Typography>
+      <TabsComponent tabs={tabs} />
+    </div>
   );
 };
 
