@@ -1,11 +1,12 @@
+import { useAssets } from "@/hooks";
 import { Asset } from "@prisma/client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 
 interface IAssetsContext {
   assets: Asset[];
   isLoading: boolean;
-  getAssets: (filter: string) => void;
+  get: (filter: string) => void;
 }
 
 const AssetsContext = createContext<IAssetsContext | null>(null);
@@ -26,22 +27,20 @@ export function AssetsContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [assets, setAssets] = useState<Asset[]>([]);
-  const [enableGetAssets, setEnableGetAssets] = useState(true);
-  const { isLoading } = trpc.useQuery(["assets.findMany", { filter: "" }], {
-    enabled: enableGetAssets,
-    onSuccess: (assets) => {
-      setAssets(assets);
-      setEnableGetAssets(false);
-    },
-  });
+  const { getAssets, loading, assets: fAssets } = useAssets();
 
-  function getAssets(filter: string) {
-    setEnableGetAssets(true);
+  const [assets, setAssets] = useState<Asset[]>([]);
+
+  useEffect(() => {
+    setAssets(fAssets);
+  }, [loading]);
+
+  function get(filter?: string) {
+    getAssets(filter);
   }
 
   return (
-    <AssetsContext.Provider value={{ assets, isLoading, getAssets }}>
+    <AssetsContext.Provider value={{ assets, isLoading: loading, get }}>
       {children}
     </AssetsContext.Provider>
   );

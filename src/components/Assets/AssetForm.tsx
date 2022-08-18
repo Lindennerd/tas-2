@@ -2,6 +2,7 @@ import { Button, Input } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useAssetContext } from "../../context/asset.context";
 import { AssetInput } from "../../schemas/asset.schema";
+import Loading from "../UI/Loading";
 
 export function AssetForm() {
   const context = useAssetContext();
@@ -19,32 +20,35 @@ export function AssetForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <Input label="Nome" {...register("name", { required: true })} />
-        {errors.name && errors.name.type === "required" && (
-          <span>O nome é obrigatório</span>
-        )}
-      </div>
-      <div>
-        <Input
-          label="Descrição"
-          {...register("description", { required: true })}
-        />
-        {errors.description && errors.description.type === "required" && (
-          <span>A descrição é obrigatória</span>
-        )}
-      </div>
-      <div>
-        <Input
-          label="Endereço (URL, servidor etc...)"
-          {...register("url", { required: false })}
-        />
-      </div>
+    <>
+      {context.isLoading && <Loading />}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <Input label="Nome" {...register("name", { required: true })} />
+          {errors.name && errors.name.type === "required" && (
+            <span>O nome é obrigatório</span>
+          )}
+        </div>
+        <div>
+          <Input
+            label="Descrição"
+            {...register("description", { required: true })}
+          />
+          {errors.description && errors.description.type === "required" && (
+            <span>A descrição é obrigatória</span>
+          )}
+        </div>
+        <div>
+          <Input
+            label="Endereço (URL, servidor etc...)"
+            {...register("url", { required: false })}
+          />
+        </div>
 
-      <Button type="submit" variant="filled">
-        Salvar
-      </Button>
-    </form>
+        <Button type="submit" variant="filled">
+          Salvar
+        </Button>
+      </form>
+    </>
   );
 }

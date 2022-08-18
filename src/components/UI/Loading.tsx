@@ -85,7 +85,7 @@ export function LoadingSvgComponent(
 
 export default function Loading() {
   return (
-    <div className="flex flex-col justify-items-center items-center justify-center fixed h-full w-full">
+    <div className="flex flex-col justify-items-center items-center justify-center fixed h-full w-full top-0 left-0 z-50 bg-gray-200 bg-opacity-70">
       <LoadingSvgComponent fill="#3f51b5" />
       <div className="mt-8">Carregando a página, por favor aguarde</div>
     </div>

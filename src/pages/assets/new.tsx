@@ -1,23 +1,10 @@
 import { ManifestForm } from "@/components/Manifests/ManifestForm";
-import { TabsComponent } from "@/components/UI";
-import {
-  Tab,
-  TabPanel,
-  Tabs,
-  TabsBody,
-  TabsHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Tab, TabsComponent } from "@/components/UI";
+import { Typography } from "@material-tailwind/react";
 import { NextPage } from "next";
 import { useState } from "react";
 import { AssetForm } from "../../components/Assets";
 import { AssetContextProvider } from "../../context/asset.context";
-
-interface Tab {
-  label: string;
-  value: string;
-  component: React.ReactNode;
-}
 
 const NewAsset: NextPage = () => {
   const tabs: Tab[] = [

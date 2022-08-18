@@ -1,6 +1,6 @@
 import { Asset } from "@prisma/client";
 import { createContext, useContext, useState } from "react";
-import { useAsset } from "../hooks";
+import { useAssets } from "../hooks";
 import { AssetInput } from "../schemas/asset.schema";
 import { trpc } from "../utils/trpc";
 
@@ -31,21 +31,24 @@ export function AssetContextProvider({
 }) {
   const [asset, setAsset] = useState<Asset>({} as Asset);
   const [enableGetAsset, setEnableGetAsset] = useState(true);
+  const [idAsset, setIdAsset] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const { addAsset, editAsset } = useAsset();
+  const { addAsset, editAsset } = useAssets();
 
-  const { isLoading } = trpc.useQuery(["assets.findFirst", { id: "" }], {
+  const { isLoading } = trpc.useQuery(["assets.findFirst", { id: idAsset }], {
     enabled: enableGetAsset,
     onSuccess: (asset: Asset) => {
       setAsset(asset!);
       setEnableGetAsset(false);
+      setLoading(false);
     },
   });
 
-  const [loading, setLoading] = useState(isLoading);
-
   function get(id: string) {
+    setIdAsset(id);
     setEnableGetAsset(true);
+    setLoading(true);
   }
 
   async function mutate(mutatingAsset: AssetInput) {
