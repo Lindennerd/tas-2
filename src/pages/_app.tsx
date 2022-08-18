@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import { AppProps } from "next/app";
 
 import { withTRPC } from "@trpc/next";
@@ -15,9 +16,6 @@ import { MainLayout } from "../components/Layouts";
 
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
-
-import { ThemeProvider } from "@material-tailwind/react";
-import theme from "../theme/kpmg-theme";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -36,9 +34,11 @@ const MyApp: AppType = (({
     ((page) => (
       <SessionProvider session={session}>
         <AuthContextProvider>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
+          <ThemeProvider value={kpmgTheme}>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </ThemeProvider>
         </AuthContextProvider>
       </SessionProvider>
     ));

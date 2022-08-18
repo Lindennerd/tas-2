@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAssetContext } from "../../context/asset.context";
 import { AssetInput } from "../../schemas/asset.schema";
 import Loading from "../UI/Loading";
+import { ToastContainer, toast } from "react-toastify";
 
 export function AssetForm() {
   const context = useAssetContext();
@@ -17,6 +18,7 @@ export function AssetForm() {
 
   async function onSubmit(data: AssetInput) {
     await context.mutate({ ...data });
+    toast.success("Ativo salvo com sucesso!");
   }
 
   return (
@@ -45,9 +47,11 @@ export function AssetForm() {
           />
         </div>
 
-      <Button type="submit" variant="solid" color="primary">
-        Salvar
-      </Button>
-    </form>
+        <Button type="submit" variant="filled">
+          Salvar
+        </Button>
+      </form>
+      <ToastContainer />
+    </>
   );
 }
