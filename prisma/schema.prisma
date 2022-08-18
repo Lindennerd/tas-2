@@ -133,7 +133,7 @@ model Question {
 model Section {
   id          String     @id @default(cuid())
   name        String
-  description String?
+  description String
   questions   Question[]
   Manifest    Manifest?  @relation(fields: [manifestId], references: [id])
   manifestId  String?

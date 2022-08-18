@@ -1,17 +1,50 @@
-import { AssetEdit, AssetInput } from "../schemas/asset.schema";
+import { useState } from "react";
+import {
+  Document,
+  DocumentEdit,
+  DocumentInput,
+} from "../schemas/document.schema";
 import { trpc } from "../utils/trpc";
 
-export function useAsset() {
-  const createAsset = trpc.useMutation(["assets.create"]);
-  const editAsset = trpc.useMutation(["assets.edit"]);
+export function useDocuments() {
+  const [enableGet, setEnableGet] = useState(false);
+  const [filterParam, setFilterParam] = useState<string>("");
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const createDocument = trpc.useMutation(["documents.create"]);
+  const editDocument = trpc.useMutation(["documents.edit"]);
+  const { isLoading } = trpc.useQuery(
+    ["documents.findMany", { filter: filterParam }],
+    {
+      enabled: enableGet,
+      onSuccess: (documents) => {
+        setDocuments(documents);
+        setEnableGet(false);
+        setLoading(false);
+      },
+    }
+  );
 
   return {
-    addAsset: async (asset: AssetInput) => {
-      return await createAsset.mutateAsync(asset);
+    loading,
+    documents,
+    add: async (document: DocumentInput) => {
+      return await createDocument.mutateAsync(document);
     },
 
-    editAsset: async (asset: AssetEdit) => {
-      return await editAsset.mutateAsync(asset);
+    edit: async (document: DocumentEdit) => {
+      return await editDocument.mutateAsync(document);
+    },
+
+    getAssets: async (filter?: string) => {
+      setFilterParam(filter ?? "");
+      setEnableGet(true);
+      setLoading(true);
+
+      if (!isLoading) {
+        return documents;
+      }
     },
   };
 }

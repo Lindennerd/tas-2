@@ -1,4 +1,4 @@
-import { Asset } from "@prisma/client";
+import { Asset } from "../schemas/asset.schema";
 import { useState } from "react";
 import { AssetEdit, AssetInput } from "../schemas/asset.schema";
 import { trpc } from "../utils/trpc";

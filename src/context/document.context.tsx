@@ -1,5 +1,5 @@
 import { trpc } from "@/utils/trpc";
-import { Document } from "@prisma/client";
+import { Document } from "../schemas/document.schema";
 import { createContext, useContext, useState } from "react";
 
 interface IDocumentContext {

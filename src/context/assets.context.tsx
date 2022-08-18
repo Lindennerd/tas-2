@@ -1,5 +1,5 @@
 import { useAssets } from "@/hooks";
-import { Asset } from "@prisma/client";
+import { Asset } from "../schemas/asset.schema";
 import { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 
