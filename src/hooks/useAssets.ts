@@ -2,8 +2,11 @@ import { Asset } from "../schemas/asset.schema";
 import { useState } from "react";
 import { AssetEdit, AssetInput } from "../schemas/asset.schema";
 import { trpc } from "../utils/trpc";
+import { useErrorContext } from "@/context/error.context";
 
 export function useAssets() {
+  const errorContext = useErrorContext();
+
   const [enableGetAssets, setEnableGetAssets] = useState(false);
   const [filterParam, setFilterParam] = useState<string>("");
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -13,8 +16,16 @@ export function useAssets() {
   const [asset, setAsset] = useState<Asset | null>(null);
   const [idAsset, setIdAsset] = useState("");
 
-  const createAsset = trpc.useMutation(["assets.create"]);
-  const editAsset = trpc.useMutation(["assets.edit"]);
+  const createAsset = trpc.useMutation(["assets.create"], {
+    onError: (error) => {
+      errorContext.setError(error.message);
+    },
+  });
+  const editAsset = trpc.useMutation(["assets.edit"], {
+    onError: (error) => {
+      errorContext.setError(error.message);
+    },
+  });
   const { isLoading: isLoadingAssets } = trpc.useQuery(
     ["assets.findMany", { filter: filterParam }],
     {
@@ -23,6 +34,9 @@ export function useAssets() {
         setAssets(assets);
         setEnableGetAssets(false);
         setLoading(false);
+      },
+      onError: (error) => {
+        errorContext.setError(error.message);
       },
     }
   );
@@ -35,6 +49,9 @@ export function useAssets() {
         setAsset(asset);
         setEnableGetAsset(false);
         setLoading(false);
+      },
+      onError: (error) => {
+        errorContext.setError(error.message);
       },
     }
   );

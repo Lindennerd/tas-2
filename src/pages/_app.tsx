@@ -16,6 +16,7 @@ import { MainLayout } from "../components/Layouts";
 
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
+import { ErrorProvider } from "@/context/error.context";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -35,9 +36,11 @@ const MyApp: AppType = (({
       <SessionProvider session={session}>
         <AuthContextProvider>
           <ThemeProvider value={kpmgTheme}>
-            <MainLayout>
-              <Component {...pageProps} />
-            </MainLayout>
+            <ErrorProvider>
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            </ErrorProvider>
           </ThemeProvider>
         </AuthContextProvider>
       </SessionProvider>

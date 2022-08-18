@@ -1,3 +1,4 @@
+import { useErrorContext } from "@/context/error.context";
 import { useState } from "react";
 import {
   Document,
@@ -7,13 +8,23 @@ import {
 import { trpc } from "../utils/trpc";
 
 export function useDocuments() {
+  const { setError } = useErrorContext();
+
   const [enableGet, setEnableGet] = useState(false);
   const [filterParam, setFilterParam] = useState<string>("");
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const createDocument = trpc.useMutation(["documents.create"]);
-  const editDocument = trpc.useMutation(["documents.edit"]);
+  const createDocument = trpc.useMutation(["documents.create"], {
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
+  const editDocument = trpc.useMutation(["documents.edit"], {
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
   const { isLoading } = trpc.useQuery(
     ["documents.findMany", { filter: filterParam }],
     {
@@ -22,6 +33,9 @@ export function useDocuments() {
         setDocuments(documents);
         setEnableGet(false);
         setLoading(false);
+      },
+      onError: (error) => {
+        setError(error.message);
       },
     }
   );
