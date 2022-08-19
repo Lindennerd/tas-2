@@ -1,6 +1,7 @@
 import {
   sectionEditSchema,
   sectionInputSchema,
+  sectionSchema,
 } from "./../../schemas/section.schema";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
