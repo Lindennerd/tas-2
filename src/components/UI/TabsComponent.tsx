@@ -4,12 +4,12 @@ import {
   Tabs,
   TabsBody,
   TabsHeader,
-  Typography,
 } from "@material-tailwind/react";
 
 export interface Tab {
   label: string;
   value: string;
+  disabled?: boolean;
   component: React.ReactNode;
 }
 
@@ -23,7 +23,7 @@ export function TabsComponent({ tabs }: TabsComponentProps) {
       <Tabs value="asset-details">
         <TabsHeader>
           {tabs.map((tab) => (
-            <Tab key={tab.value} value={tab.value}>
+            <Tab key={tab.value} value={tab.value} disabled={tab.disabled}>
               {tab.label}
             </Tab>
           ))}

@@ -1,26 +1,45 @@
+import { useErrorContext } from "@/context/error.context";
+import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { useAssetsContext } from "../../context/assets.context";
 import { Filter, FilterForm } from "../UI";
 import Loading from "../UI/Loading";
 
 export function AssetList() {
-  const context = useAssetsContext();
   const router = useRouter();
+  const { setError } = useErrorContext();
+  const [filter, setFilter] = useState("");
+  const [enableQuery, setEnableQuery] = useState(false);
+
+  const {
+    data: assets,
+    error,
+    isLoading,
+  } = trpc.useQuery(["assets.findMany", { filter }], {
+    enabled: enableQuery,
+    onSuccess: (assets) => {
+      setEnableQuery(false);
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
 
   function onSubmit(data: FilterForm) {
-    context.get(data.filter);
+    setFilter(data.filter);
+    setEnableQuery(true);
   }
 
   useEffect(() => {
-    context.get("");
+    setFilter("");
+    setEnableQuery(true);
   }, []);
 
   return (
     <div className="p-2">
-      {context.isLoading && <Loading />}
+      {isLoading && <Loading />}
       <div className="flex justify-between space-x-2">
         <Filter onSubmit={onSubmit} />
         <Button
@@ -35,8 +54,8 @@ export function AssetList() {
         </Button>
       </div>
       <div>
-        {context.assets &&
-          context.assets.map((asset) => (
+        {assets &&
+          assets.map((asset) => (
             <div key={asset.id} className="flex justify-between space-x-2">
               {asset.name}
             </div>

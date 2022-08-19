@@ -3,7 +3,7 @@ const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
   mode: "jit",
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}", "./node_modules/tw-elements/dist/js/**/*.js"],
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
@@ -14,6 +14,6 @@ module.exports = withMT({
     },
   },
     plugins: [
-
+require('tw-elements/dist/plugin')
   ],
 });

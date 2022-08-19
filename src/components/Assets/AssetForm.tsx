@@ -1,29 +1,49 @@
 import { Button, Input } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { useAssetContext } from "../../context/asset.context";
-import { AssetInput } from "../../schemas/asset.schema";
+import { AssetEdit, AssetInput } from "../../schemas/asset.schema";
 import Loading from "../UI/Loading";
 import { ToastContainer, toast } from "react-toastify";
+import { trpc } from "@/utils/trpc";
+import { useErrorContext } from "@/context/error.context";
 
-export function AssetForm() {
-  const context = useAssetContext();
+interface IAssetFormProps {
+  asset?: AssetEdit;
+}
 
+export function AssetForm({ asset }: IAssetFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AssetInput>({
-    defaultValues: { ...context.asset, url: context.asset?.url ?? "" },
+    defaultValues: { ...asset, url: asset?.url ?? "" },
+  });
+
+  const { setError } = useErrorContext();
+
+  const createAsset = trpc.useMutation(["assets.create"], {
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
+  const editAsset = trpc.useMutation(["assets.edit"], {
+    onError: (error) => {
+      setError(error.message);
+    },
   });
 
   async function onSubmit(data: AssetInput) {
-    await context.mutate({ ...data });
+    if (asset) {
+      await editAsset.mutateAsync({ id: asset.id, ...data });
+    } else {
+      await createAsset.mutateAsync(data);
+    }
+
     toast.success("Ativo salvo com sucesso!");
   }
 
   return (
     <>
-      {context.isLoading && <Loading />}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <Input label="Nome" {...register("name", { required: true })} />
