@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { TiDocument, TiUser, TiDocumentText } from "react-icons/ti";
 import { MdWebAsset } from "react-icons/md";
+import { TbSection } from "react-icons/tb";
 
 export function Sidebar() {
   const { data: session } = useSession();
@@ -30,6 +31,12 @@ export function Sidebar() {
         <a className="flex justify-start p-2 w-full overflow-hidden hover:bg-primary hover:border-l-white hover:border-l-2">
           <MdWebAsset className="text-2xl min-w-[32px]" />
           <span className="overflow-hidden ml-2 ">Ativos</span>
+        </a>
+      </Link>
+      <Link href="/sections">
+        <a className="flex justify-start p-2 w-full overflow-hidden hover:bg-primary hover:border-l-white hover:border-l-2">
+          <TbSection className="text-2xl min-w-[32px]" />
+          <span className="overflow-hidden ml-2 ">Seções</span>
         </a>
       </Link>
     </div>

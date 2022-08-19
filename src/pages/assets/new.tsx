@@ -5,8 +5,11 @@ import { NextPage } from "next";
 import { AssetForm } from "../../components/Assets";
 
 import { ReactNode, useState } from "react";
+import { Asset } from "@/schemas/asset.schema";
 
 const NewAsset: NextPage = () => {
+  const [asset, setAsset] = useState<Asset | null>(null);
+
   return (
     <div className="p-8 space-y-2">
       <Typography variant="h5" className="mb-2 text-center">
@@ -19,7 +22,7 @@ const NewAsset: NextPage = () => {
             label: "Informações básicas do Ativo",
             component: (
               <Paper>
-                <AssetForm />
+                <AssetForm setAsset={setAsset} />
               </Paper>
             ),
           },

@@ -1,6 +1,6 @@
 import { Button, Input } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { AssetEdit, AssetInput } from "../../schemas/asset.schema";
+import { Asset, AssetEdit, AssetInput } from "../../schemas/asset.schema";
 import Loading from "../UI/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import { trpc } from "@/utils/trpc";
@@ -8,9 +8,10 @@ import { useErrorContext } from "@/context/error.context";
 
 interface IAssetFormProps {
   asset?: AssetEdit;
+  setAsset?: (asset: Asset) => void;
 }
 
-export function AssetForm({ asset }: IAssetFormProps) {
+export function AssetForm({ asset, setAsset }: IAssetFormProps) {
   const {
     register,
     handleSubmit,
@@ -33,11 +34,15 @@ export function AssetForm({ asset }: IAssetFormProps) {
   });
 
   async function onSubmit(data: AssetInput) {
+    let mutated: Asset;
+
     if (asset) {
-      await editAsset.mutateAsync({ id: asset.id, ...data });
+      mutated = await editAsset.mutateAsync({ id: asset.id, ...data });
     } else {
-      await createAsset.mutateAsync(data);
+      mutated = await createAsset.mutateAsync(data);
     }
+
+    if (setAsset) setAsset(mutated);
 
     toast.success("Ativo salvo com sucesso!");
   }
