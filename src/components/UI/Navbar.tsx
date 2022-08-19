@@ -9,7 +9,7 @@ export function Navbar() {
   return (
     <div className="h-12 bg-primary fixed top-0 w-full text-white flex justify-between items-center">
       <div className="ml-2">
-        <Link href="\">
+        <Link href="/">
           <a>
             <Image src="/chatbot.png" alt="BOT's logo" width="40" height="40" />
           </a>

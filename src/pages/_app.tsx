@@ -14,7 +14,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import kpmgTheme from "../theme/kpmg-theme";
 import { MainLayout } from "../components/Layouts";
 
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { NextPage } from "next";
 import { ErrorProvider } from "@/context/error.context";
 
