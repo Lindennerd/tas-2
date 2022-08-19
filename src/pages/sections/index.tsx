@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { SectionList } from "@/components/Sections/SectionList";
 import { Filter, FilterForm } from "@/components/UI";
 import { trpc } from "@/utils/trpc";
@@ -18,3 +19,8 @@ const SectionsPage: NextPage = () => {
 };
 
 export default SectionsPage;
+=======
+export default function SectionsPage() {
+  return <div>Seções</div>;
+}
+>>>>>>> acea6c11065b12344c094d305aeeaaf00dbfc347
