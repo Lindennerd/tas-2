@@ -10,15 +10,30 @@ import { createRouter } from "./../context/context";
 const sectionSelect = {
   id: true,
   name: true,
+  description: true,
   questions: {
     select: {
+      id: true,
       description: true,
       help: true,
-      id: true,
       type: true,
       weight: true,
-      Option: true,
-      Extensions: true,
+      Option: {
+        select: {
+          id: true,
+          description: true,
+          help: true,
+          default: true,
+        },
+      },
+      Extensions: {
+        select: {
+          id: true,
+          description: true,
+          help: true,
+          default: true,
+        },
+      },
     },
   },
 };

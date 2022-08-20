@@ -4,7 +4,7 @@ import { Button, Typography } from "@material-tailwind/react";
 import { NextPage } from "next";
 import { AssetForm } from "../../components/Assets";
 
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { Asset } from "@/schemas/asset.schema";
 
 const NewAsset: NextPage = () => {

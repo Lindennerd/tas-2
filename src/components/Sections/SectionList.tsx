@@ -5,5 +5,17 @@ interface SectionListProps {
 }
 
 export function SectionList({ sections }: SectionListProps) {
-  return <div>SectionList</div>;
+  return (
+    <div>
+      {sections.map((section) => {
+        if (section) {
+          return (
+            <div key={section.id}>
+              <h2>{section.name}</h2>
+            </div>
+          );
+        }
+      })}
+    </div>
+  );
 }

@@ -17,4 +17,27 @@ export const sectionEditSchema = sectionInputSchema.extend({
   id: z.string(),
 });
 
-export type Section = z.infer<typeof sectionSchema>;
+export type Section = {
+  questions: {
+    Option: {
+      default: boolean;
+      id: string;
+      description: string;
+      help: string | null;
+    }[];
+    Extensions: {
+      default: boolean;
+      id: string;
+      description: string;
+      help: never;
+    }[];
+    type: string;
+    id: string;
+    description: string;
+    help: string | null;
+    weight: number;
+  }[];
+  name: string;
+  id: string;
+  description: string;
+} | null;

@@ -2,7 +2,6 @@ import { SectionList } from "@/components/Sections/SectionList";
 import { Filter, FilterForm } from "@/components/UI";
 import Loading from "@/components/UI/Loading";
 import { useErrorContext } from "@/context/error.context";
-import { Section } from "@/schemas/section.schema";
 import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/router";
@@ -54,7 +53,7 @@ export default function SectionsPage() {
         </Button>
       </div>
       <div className="mt-2">
-        <SectionList sections={sections as Section[]} />
+        {sections && <SectionList sections={sections} />}
       </div>
     </div>
   );
