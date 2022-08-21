@@ -7,7 +7,7 @@ export function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <div className="h-12 bg-primary fixed top-0 w-full text-white flex justify-between items-center">
+    <div className="h-12 bg-primary fixed top-0 w-full text-white flex justify-between items-center z-50">
       <div className="ml-2">
         <Link href="/">
           <a>
