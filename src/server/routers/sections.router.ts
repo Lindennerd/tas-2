@@ -30,7 +30,6 @@ const sectionSelect = {
         select: {
           id: true,
           description: true,
-          help: true,
           default: true,
         },
       },
@@ -56,7 +55,7 @@ export const sectionsRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.section.findMany({
-        where: { name: input.filter },
+        where: { name: { contains: input.filter } },
         select: sectionSelect,
       });
     },
