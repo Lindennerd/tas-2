@@ -17,6 +17,8 @@ export const sectionEditSchema = sectionInputSchema.extend({
   id: z.string(),
 });
 
+export type SectionInput = z.infer<typeof sectionInputSchema>;
+
 export type Section = {
   questions: {
     Option: {
@@ -29,7 +31,6 @@ export type Section = {
       default: boolean;
       id: string;
       description: string;
-      help: never;
     }[];
     type: string;
     id: string;

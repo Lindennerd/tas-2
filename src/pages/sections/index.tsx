@@ -43,7 +43,7 @@ export default function SectionsPage() {
         <Filter onSubmit={onFilter} />
         <Button
           onClick={() => {
-            router.push("/assets/new");
+            router.push("/sections/new");
           }}
           className="p-2 space-x-1 flex items-center whitespace-nowrap"
           color="green"
