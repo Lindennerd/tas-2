@@ -1,14 +1,30 @@
+import { useErrorContext } from "@/context/error.context";
 import { Option } from "@/schemas/option.schema";
+import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BiTrash } from "react-icons/bi";
+import { VscLoading } from "react-icons/vsc";
 
 interface OptionsListProps {
   options?: Option[];
-  removeOption: (option: Option) => void;
+  onRemoveOption?: () => void;
 }
 
-export function OptionsList({ options, removeOption }: OptionsListProps) {
+export function OptionsList({ options, onRemoveOption }: OptionsListProps) {
+  const { setError } = useErrorContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const removeOptionMutation = trpc.useMutation(["options.delete"], {
+    onError: (error) => setError(error.message),
+    onSuccess: () => setIsLoading(false),
+  });
+
+  async function removeOption(option: Option) {
+    setIsLoading(true);
+    await removeOptionMutation.mutateAsync({ id: option.id });
+    onRemoveOption && onRemoveOption();
+  }
+
   return (
     <div>
       {options &&
@@ -24,8 +40,13 @@ export function OptionsList({ options, removeOption }: OptionsListProps) {
                 color="red"
                 className="rounded-full p-1"
                 onClick={() => removeOption(option)}
+                disabled={isLoading}
               >
-                <BiTrash className="text-lg" />
+                {isLoading ? (
+                  <VscLoading className="text-lg" />
+                ) : (
+                  <BiTrash className="text-lg" />
+                )}
               </Button>
             </div>
           );

@@ -1,3 +1,4 @@
+import { optionsRouter } from "./../routers/options.router";
 import { questionsRouter } from "./../routers/questions.router";
 import { assetRouter } from "./../routers/assets.router";
 import { createRouter } from "./context";
@@ -10,6 +11,7 @@ export const appRouter = createRouter()
   .merge("assets.", assetRouter)
   .merge("documents.", documentRouter)
   .merge("sections.", sectionsRouter)
-  .merge("questions.", questionsRouter);
+  .merge("questions.", questionsRouter)
+  .merge("options.", optionsRouter);
 
 export type AppRouter = typeof appRouter;

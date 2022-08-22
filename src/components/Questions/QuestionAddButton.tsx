@@ -10,7 +10,15 @@ import { useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
 import { QuestionForm } from "./QuestionForm";
 
-export function QuestionAddButton({ enabled }: { enabled: boolean }) {
+interface QuestionAddButtonProps {
+  sectionId: string;
+  onQuestionAdded: () => void;
+}
+
+export function QuestionAddButton({
+  sectionId,
+  onQuestionAdded,
+}: QuestionAddButtonProps) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -28,7 +36,7 @@ export function QuestionAddButton({ enabled }: { enabled: boolean }) {
           color="green"
           className="rounded-full"
           variant="gradient"
-          disabled={!enabled}
+          disabled={sectionId === undefined || sectionId === ""}
           onClick={handleOpen}
         >
           <BiAddToQueue className="text-lg" />
@@ -40,13 +48,14 @@ export function QuestionAddButton({ enabled }: { enabled: boolean }) {
           <span className="text-center">Adicionar nova questão</span>
         </DialogHeader>
         <DialogBody divider className="overflow-auto">
-          <QuestionForm />
+          <QuestionForm
+            sectionId={sectionId}
+            onSave={() => {
+              handleOpen();
+              onQuestionAdded();
+            }}
+          />
         </DialogBody>
-        <DialogFooter>
-          <Button variant="outlined" color="green" onClick={handleOpen}>
-            Salvar
-          </Button>
-        </DialogFooter>
       </Dialog>
     </>
   );
