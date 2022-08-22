@@ -1,7 +1,15 @@
 import { z } from "zod";
 
 export const optionSchema = z.object({
-  id: z.string(),
   description: z.string(),
-  help: z.string(),
 });
+
+export const optionInputSchema = optionSchema.extend({
+  questionId: z.string(),
+});
+
+export const optionEditSchema = optionInputSchema.extend({
+  id: z.string(),
+});
+
+export type Option = z.infer<typeof optionSchema>;

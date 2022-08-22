@@ -10,3 +10,9 @@ export const questionSchema = z.object({
   options: z.array(optionSchema),
   extensions: z.array(extensionSchema),
 });
+
+export enum QuestionType {
+  text = "Texto",
+  multipleChoice = "Múltipla escolha",
+  file = "Arquivo",
+}
