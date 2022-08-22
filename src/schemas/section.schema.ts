@@ -1,3 +1,4 @@
+import { inferQueryOutput } from "./../utils/trpc";
 import { questionSchema } from "./question.schema";
 import { z } from "zod";
 
@@ -18,27 +19,4 @@ export const sectionEditSchema = sectionInputSchema.extend({
 });
 
 export type SectionInput = z.infer<typeof sectionInputSchema>;
-
-export type Section = {
-  questions: {
-    Option: {
-      default: boolean;
-      id: string;
-      description: string;
-      help: string | null;
-    }[];
-    Extensions: {
-      default: boolean;
-      id: string;
-      description: string;
-    }[];
-    type: string;
-    id: string;
-    description: string;
-    help: string | null;
-    weight: number;
-  }[];
-  name: string;
-  id: string;
-  description: string;
-} | null;
+export type SectionOutput = inferQueryOutput<"sections.findFirst">;

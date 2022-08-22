@@ -1,14 +1,13 @@
 import { Button, Input } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { Asset, AssetEdit, AssetInput } from "../../schemas/asset.schema";
-import Loading from "../UI/Loading";
+import { AssetOutput, AssetEdit, AssetInput } from "../../schemas/asset.schema";
 import { ToastContainer, toast } from "react-toastify";
 import { trpc } from "@/utils/trpc";
 import { useErrorContext } from "@/context/error.context";
 
 interface IAssetFormProps {
   asset?: AssetEdit;
-  setAsset?: (asset: Asset) => void;
+  setAsset?: (asset: AssetOutput) => void;
 }
 
 export function AssetForm({ asset, setAsset }: IAssetFormProps) {
@@ -34,7 +33,7 @@ export function AssetForm({ asset, setAsset }: IAssetFormProps) {
   });
 
   async function onSubmit(data: AssetInput) {
-    let mutated: Asset;
+    let mutated: AssetOutput;
 
     if (asset) {
       mutated = await editAsset.mutateAsync({ id: asset.id, ...data });

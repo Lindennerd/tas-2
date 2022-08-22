@@ -1,13 +1,13 @@
 import { useErrorContext } from "@/context/error.context";
-import { Section, SectionInput } from "@/schemas/section.schema";
+import { SectionOutput, SectionInput } from "@/schemas/section.schema";
 import { trpc } from "@/utils/trpc";
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 
 interface ISectionFormProps {
-  mutatedSection?: (section: Section) => void;
-  section?: Section;
+  mutatedSection?: (section: SectionOutput) => void;
+  section?: SectionOutput;
 }
 
 export default function SectionForm({

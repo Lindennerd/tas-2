@@ -1,7 +1,7 @@
-import { Section } from "@/schemas/section.schema";
+import { SectionOutput } from "@/schemas/section.schema";
 
 interface SectionListProps {
-  sections: Section[];
+  sections: SectionOutput[];
 }
 
 export function SectionList({ sections }: SectionListProps) {

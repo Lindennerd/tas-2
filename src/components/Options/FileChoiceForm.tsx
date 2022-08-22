@@ -1,5 +1,3 @@
-import { Radio } from "@material-tailwind/react";
-
 export type FileExtensions = {
   extensions: string[];
   description: string;

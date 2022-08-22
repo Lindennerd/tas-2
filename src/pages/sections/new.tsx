@@ -1,11 +1,11 @@
 import { QuestionsList } from "@/components/Questions/QuestionsList";
 import SectionForm from "@/components/Sections/SectionForm";
-import { Section } from "@/schemas/section.schema";
+import { SectionOutput } from "@/schemas/section.schema";
 import { Typography } from "@material-tailwind/react";
 import { useState } from "react";
 
 export default function NewSectionPage() {
-  const [section, setSection] = useState<Section | null>(null);
+  const [section, setSection] = useState<SectionOutput | null>(null);
 
   return (
     <>

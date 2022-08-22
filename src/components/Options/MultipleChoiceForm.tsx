@@ -1,5 +1,4 @@
 import { useErrorContext } from "@/context/error.context";
-import { Option } from "@/schemas/option.schema";
 import { trpc } from "@/utils/trpc";
 import { Button, Input } from "@material-tailwind/react";
 import { useState } from "react";

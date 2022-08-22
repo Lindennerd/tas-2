@@ -4,7 +4,7 @@ import { Filter, FilterForm } from "../UI";
 
 export function DocumentList() {
   function onSubmit(data: FilterForm) {
-    context.getAssets(data.filter);
+    //context.getAssets(data.filter);
   }
 
   return (
@@ -13,7 +13,7 @@ export function DocumentList() {
         <Filter onSubmit={onSubmit} />
         <Button
           onClick={() => {
-            router.push("/assets/new");
+            //router.push("/assets/new");
           }}
           className="p-2 space-x-1 flex items-center whitespace-nowrap"
           color="green"
