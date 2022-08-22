@@ -61,6 +61,15 @@ export const questionsRouter = createRouter()
       });
     },
   })
+  .query("findOne", {
+    input: z.object({ id: z.string() }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.question.findFirst({
+        where: { id: input.id },
+        select: questionSelect,
+      });
+    },
+  })
   .mutation("create", {
     input: questionInputSchema,
     async resolve({ ctx, input }) {

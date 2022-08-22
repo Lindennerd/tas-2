@@ -14,6 +14,8 @@ import Loading from "../UI/Loading";
 import { Table, TableRow, TableCell, Heading } from "../UI/Table";
 import { QuestionAddButton } from "./QuestionAddButton";
 
+import { inferQueryOutput } from "@/utils/trpc";
+
 interface QuestionsListProps {
   sectionId: string;
 }
@@ -81,7 +83,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
             setToggleMultipleChoiceDialog(true);
           }}
         >
-          Múltipla Escolha ({question.Option.length})
+          Múltipla Escolha ({question?.Option.length})
         </Button>
       );
     if (type === "file")
