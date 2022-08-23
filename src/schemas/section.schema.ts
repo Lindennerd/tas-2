@@ -12,6 +12,7 @@ export const sectionSchema = z.object({
 export const sectionInputSchema = z.object({
   name: z.string(),
   description: z.string(),
+  required: z.boolean(),
 });
 
 export const sectionEditSchema = sectionInputSchema.extend({

@@ -8,7 +8,7 @@ export default function NewSectionPage() {
   const [section, setSection] = useState<SectionOutput | null>(null);
 
   return (
-    <>
+    <div className="px-8">
       <Typography variant="h5" className="mb-2 text-center">
         Cadastro de Seção
       </Typography>
@@ -21,6 +21,6 @@ export default function NewSectionPage() {
       <div>
         <QuestionsList sectionId={section ? section.id : ""} />
       </div>
-    </>
+    </div>
   );
 }

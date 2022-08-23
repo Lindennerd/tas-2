@@ -64,6 +64,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     { label: "Tipo" },
     {
       element: (
+        // TODO fix prop drilling
         <QuestionAddButton
           question={selectedQuestion}
           sectionId={sectionId}

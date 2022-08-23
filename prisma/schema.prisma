@@ -138,6 +138,7 @@ model Section {
   manifestId  String?
   Document    Document?  @relation(fields: [documentId], references: [id])
   documentId  String?
+  required Boolean @default(false)
 }
 
 model Manifest {

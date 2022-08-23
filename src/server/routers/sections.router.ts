@@ -11,6 +11,7 @@ const sectionSelect = {
   id: true,
   name: true,
   description: true,
+  required: true,
   questions: {
     select: {
       id: true,
@@ -22,7 +23,6 @@ const sectionSelect = {
         select: {
           id: true,
           description: true,
-          help: true,
           default: true,
         },
       },
