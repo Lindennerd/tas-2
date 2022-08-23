@@ -14,7 +14,7 @@ export default function NewSectionPage() {
       </Typography>
       <div>
         <SectionForm
-          mutatedSection={(mutatedSection) => setSection(mutatedSection)}
+          onMutatedSection={(mutatedSection) => setSection(mutatedSection)}
           section={section}
         />
       </div>

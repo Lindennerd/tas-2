@@ -53,7 +53,12 @@ export default function SectionsPage() {
         </Button>
       </div>
       <div className="mt-2">
-        {sections && <SectionList sections={sections} />}
+        {sections && (
+          <SectionList
+            sections={sections}
+            onMutateSections={() => setEnableQuery(true)}
+          />
+        )}
       </div>
     </div>
   );

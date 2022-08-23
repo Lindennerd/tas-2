@@ -6,12 +6,12 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 
 interface ISectionFormProps {
-  mutatedSection?: (section: SectionOutput) => void;
+  onMutatedSection?: (section: SectionOutput) => void;
   section?: SectionOutput;
 }
 
 export default function SectionForm({
-  mutatedSection,
+  onMutatedSection: mutatedSection,
   section,
 }: ISectionFormProps) {
   const {
