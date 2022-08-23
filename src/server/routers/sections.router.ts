@@ -90,4 +90,12 @@ export const sectionsRouter = createRouter()
         select: sectionSelect,
       });
     },
+  })
+  .mutation("delete", {
+    input: z.string(),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.section.delete({
+        where: { id: input },
+      });
+    },
   });

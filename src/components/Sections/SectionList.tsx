@@ -1,5 +1,4 @@
 import { SectionOutput } from "@/schemas/section.schema";
-import { SectionCard } from "@/components/Sections/SectionCard";
 import { Heading, Table, TableCell, TableRow } from "../UI/Table";
 import {
   AiOutlineCheckCircle,
@@ -10,6 +9,8 @@ import {
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useState } from "react";
 import SectionForm from "./SectionForm";
+import { trpc } from "@/utils/trpc";
+import { useErrorContext } from "@/context/error.context";
 
 interface SectionListProps {
   sections: SectionOutput[];
@@ -31,11 +32,21 @@ export function SectionList({ sections, onMutateSections }: SectionListProps) {
     { label: "" },
   ];
 
+  const { setError } = useErrorContext();
+
+  const sectionDelete = trpc.useMutation(["sections.delete"], {
+    onError: (error) => setError(error.message),
+    onSuccess: () => onMutateSections(),
+  });
+
   function editSection(section: SectionOutput) {
     setSelectedSection(section);
     setOpenEdit(true);
   }
-  function removeSection(section: SectionOutput) {}
+  async function removeSection(section: SectionOutput) {
+    if (!section) return;
+    await sectionDelete.mutateAsync(section.id);
+  }
 
   return (
     <>
