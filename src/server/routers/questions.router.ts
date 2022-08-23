@@ -77,4 +77,12 @@ export const questionsRouter = createRouter()
         data: input,
       });
     },
+  })
+  .mutation("delete", {
+    input: z.string(),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.question.delete({
+        where: { id: input },
+      });
+    },
   });

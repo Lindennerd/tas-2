@@ -1,9 +1,31 @@
+import { useErrorContext } from "@/context/error.context";
+import { ExtensionOutput } from "@/schemas/extension.schema";
+import { trpc } from "@/utils/trpc";
+import { Button, Select, Option } from "@material-tailwind/react";
+import { useForm } from "react-hook-form";
+
 export type FileExtensions = {
   extensions: string[];
   description: string;
 };
 
-export function FileFormChoiceForm() {
+type FileExtensionsState = {
+  description: string;
+};
+
+interface FileExtensionsProps {
+  questionId: string;
+  onSaveExtensions: () => void;
+  extension?: ExtensionOutput;
+}
+
+export function FileFormChoiceForm({
+  questionId,
+  onSaveExtensions,
+  extension,
+}: FileExtensionsProps) {
+  const { register, handleSubmit } = useForm<FileExtensionsState>();
+
   const extensions: FileExtensions[] = [
     {
       extensions: ["jpg", "jpeg", "png", "gif"],
@@ -19,27 +41,46 @@ export function FileFormChoiceForm() {
     },
   ];
 
+  const { setError } = useErrorContext();
+
+  const extensionsCreate = trpc.useMutation("extensions.create", {
+    onError: (error) => setError(error.message),
+    onSuccess: () => {},
+  });
+
+  const extensionsUpdate = trpc.useMutation("extensions.update", {
+    onError: (error) => setError(error.message),
+    onSuccess: () => {},
+  });
+
+  async function onSubmit(data: FileExtensionsState) {
+    if (extension) {
+      await extensionsUpdate.mutateAsync({
+        ...data,
+        questionId: questionId,
+        id: extension.id,
+      });
+    } else {
+      await extensionsCreate.mutateAsync({ ...data, questionId: questionId });
+    }
+  }
+
   return (
     <div>
-      {extensions.map((extension, index) => (
-        <div key={index}>
-          <div className="form-check">
-            <input
-              className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-              type="radio"
-              name="flexRadioDefault"
-              id="flexRadioDefault1"
-              value={extension.extensions.join(",")}
-            />
-            <label
-              className="form-check-label inline-block text-gray-800"
-              htmlFor="flexRadioDefault1"
-            >
-              {extension.description}
-            </label>
-          </div>
-        </div>
-      ))}
+      <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
+        <select
+          {...register("description")}
+          className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          aria-label="Tipo de Questão"
+        >
+          {extensions.map((ext) => (
+            <option value={ext.extensions}>{ext.description}</option>
+          ))}
+        </select>
+        <Button type="submit" color="green">
+          Salvar
+        </Button>
+      </form>
     </div>
   );
 }

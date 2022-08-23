@@ -1,4 +1,5 @@
 import { useErrorContext } from "@/context/error.context";
+import { Question } from "@/schemas/question.schema";
 import { trpc } from "@/utils/trpc";
 import { Button, Input } from "@material-tailwind/react";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { BiAddToQueue } from "react-icons/bi";
 import { VscLoading } from "react-icons/vsc";
 
 interface MultipleChoiceFormProps {
-  questionId?: string;
+  question?: Question;
   onAddOption?: () => void;
 }
 
@@ -16,14 +17,16 @@ type MultipleChoiceFormState = {
 };
 
 export function MultipleChoiceForm({
-  questionId,
+  question,
   onAddOption,
 }: MultipleChoiceFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<MultipleChoiceFormState>();
+  } = useForm<MultipleChoiceFormState>({
+    defaultValues: question ?? {},
+  });
 
   const { setError } = useErrorContext();
 
@@ -35,12 +38,12 @@ export function MultipleChoiceForm({
   });
 
   async function onSubmit(data: MultipleChoiceFormState) {
-    if (!questionId) return;
+    if (!question) return;
     setIsLoading(true);
     await createOption.mutateAsync({
       ...data,
       default: false,
-      questionId: questionId,
+      questionId: question.id,
     });
     onAddOption && onAddOption();
   }

@@ -1,3 +1,4 @@
+import { Question } from "@/schemas/question.schema";
 import {
   Button,
   Dialog,
@@ -13,11 +14,15 @@ import { QuestionForm } from "./QuestionForm";
 interface QuestionAddButtonProps {
   sectionId: string;
   onQuestionAdded: () => void;
+  toggle: boolean;
+  question: Question;
 }
 
 export function QuestionAddButton({
   sectionId,
   onQuestionAdded,
+  toggle,
+  question,
 }: QuestionAddButtonProps) {
   const [open, setOpen] = useState(false);
 
@@ -43,13 +48,14 @@ export function QuestionAddButton({
         </Button>
       </Tooltip>
 
-      <Dialog open={open} handler={handleOpen} size={"lg"}>
+      <Dialog open={open || toggle} handler={handleOpen} size={"lg"}>
         <DialogHeader>
           <span className="text-center">Adicionar nova questão</span>
         </DialogHeader>
         <DialogBody divider className="overflow-auto">
           <QuestionForm
             sectionId={sectionId}
+            question={question}
             onSave={() => {
               handleOpen();
               onQuestionAdded();

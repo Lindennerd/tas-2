@@ -1,6 +1,6 @@
 import { useErrorContext } from "@/context/error.context";
 import { Option } from "@/schemas/option.schema";
-import { QuestionType } from "@/schemas/question.schema";
+import { Question, QuestionType } from "@/schemas/question.schema";
 import { trpc } from "@/utils/trpc";
 import {
   Button,
@@ -30,14 +30,21 @@ export type QuestionForm = {
 interface QuestionFormProps {
   sectionId: string;
   onSave: () => void;
+  question?: Question;
 }
 
-export function QuestionForm({ sectionId, onSave }: QuestionFormProps) {
+export function QuestionForm({
+  sectionId,
+  onSave,
+  question,
+}: QuestionFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<QuestionForm>();
+  } = useForm<QuestionForm>({
+    defaultValues: question ?? {},
+  });
 
   const { setError } = useErrorContext();
 
@@ -104,6 +111,9 @@ export function QuestionForm({ sectionId, onSave }: QuestionFormProps) {
           <FormError>O Tipo da questão é obrigatório</FormError>
         )}
         <Button type="submit">Salvar</Button>
+        <Button color="red" onClick={() => onSave}>
+          Cancelar
+        </Button>
       </form>
     </div>
   );

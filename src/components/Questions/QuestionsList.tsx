@@ -14,7 +14,9 @@ import Loading from "../UI/Loading";
 import { Table, TableRow, TableCell, Heading } from "../UI/Table";
 import { QuestionAddButton } from "./QuestionAddButton";
 
-import { inferQueryOutput } from "@/utils/trpc";
+import { FileFormChoiceForm } from "../Options/FileChoiceForm";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { toast, ToastContainer } from "react-toastify";
 
 interface QuestionsListProps {
   sectionId: string;
@@ -25,6 +27,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
   const [toggleMultiplechoiceDialog, setToggleMultipleChoiceDialog] =
     useState(false);
   const [toggleFileDialog, setToggleFileDialog] = useState(false);
+  const [toggleEditQuestion, setToggleEditQuestion] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null
   );
@@ -62,8 +65,13 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     {
       element: (
         <QuestionAddButton
+          question={selectedQuestion}
           sectionId={sectionId}
-          onQuestionAdded={() => setEnableQuery(true)}
+          onQuestionAdded={() => {
+            setEnableQuery(true);
+            setToggleEditQuestion(false);
+          }}
+          toggle={toggleEditQuestion}
         />
       ),
       size: 20,
@@ -102,8 +110,27 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     else return <span>{questionType}</span>;
   };
 
+  function editQuestion(question: Question) {
+    setSelectedQuestion(question);
+    setToggleEditQuestion(true);
+  }
+
+  const deleteQuestion = trpc.useMutation(["questions.delete"], {
+    onSuccess: () => {
+      setEnableQuery(true);
+      toast.warn("Questão deletada");
+    },
+    onError: (error) => setError(error.message),
+  });
+
+  async function removeQuestion(question: Question) {
+    if (!question) return;
+    await deleteQuestion.mutateAsync(question.id);
+  }
+
   return (
     <div>
+      <ToastContainer />
       {isLoading && <Loading />}
       <Table headings={headings}>
         {questions &&
@@ -113,6 +140,28 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
               <TableCell>{question.description}</TableCell>
               <TableCell>{question.help}</TableCell>
               <TableCell>{getQuestionType(question.type, question)}</TableCell>
+              <TableCell>
+                <div className="space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outlined"
+                    className="rounded-full p-1"
+                    onClick={() => editQuestion(question)}
+                  >
+                    <BiEdit className="text-lg" />
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="sm"
+                    color="red"
+                    className="rounded-full p-1"
+                    disabled={isLoading}
+                    onClick={() => removeQuestion(question)}
+                  >
+                    <BiTrash className="text-lg" />
+                  </Button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
       </Table>
@@ -126,12 +175,28 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
         <DialogBody>
           <div className="w-full space-y-2">
             <MultipleChoiceForm
-              questionId={selectedQuestion?.id}
+              question={selectedQuestion}
               onAddOption={() => setEnableQuery(true)}
             />
             <OptionsList
               options={selectedQuestion?.Option}
               onRemoveOption={() => setEnableQuery(true)}
+            />
+          </div>
+        </DialogBody>
+      </Dialog>
+
+      <Dialog handler={setToggleFileDialog} open={toggleFileDialog} size="lg">
+        <DialogHeader>Tipos de Arquivo</DialogHeader>
+        <DialogBody>
+          <div className="w-full space-y-2">
+            <FileFormChoiceForm
+              questionId={selectedQuestion ? selectedQuestion.id : ""}
+              extension={selectedQuestion?.Extensions[0]}
+              onSaveExtensions={() => {
+                setEnableQuery(true);
+                setToggleFileDialog(!toggleFileDialog);
+              }}
             />
           </div>
         </DialogBody>
