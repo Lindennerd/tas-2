@@ -1,28 +1,16 @@
-import { Question } from "@/schemas/question.schema";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  Tooltip,
-} from "@material-tailwind/react";
+import { Button, Tooltip } from "@material-tailwind/react";
 import { useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { QuestionForm } from "./QuestionForm";
+import { QuestionFormModal } from "./QuestionFormModal";
 
 interface QuestionAddButtonProps {
   sectionId: string;
   onQuestionAdded: () => void;
-  toggle: boolean;
-  question: Question;
 }
 
 export function QuestionAddButton({
   sectionId,
   onQuestionAdded,
-  toggle,
-  question,
 }: QuestionAddButtonProps) {
   const [open, setOpen] = useState(false);
 
@@ -48,21 +36,12 @@ export function QuestionAddButton({
         </Button>
       </Tooltip>
 
-      <Dialog open={open || toggle} handler={handleOpen} size={"lg"}>
-        <DialogHeader>
-          <span className="text-center">Adicionar nova questão</span>
-        </DialogHeader>
-        <DialogBody divider className="overflow-auto">
-          <QuestionForm
-            sectionId={sectionId}
-            question={question}
-            onSave={() => {
-              handleOpen();
-              onQuestionAdded();
-            }}
-          />
-        </DialogBody>
-      </Dialog>
+      <QuestionFormModal
+        open={open}
+        sectionId={sectionId}
+        handleOpen={handleOpen}
+        onQuestionMutated={onQuestionAdded}
+      />
     </>
   );
 }

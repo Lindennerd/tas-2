@@ -10,6 +10,7 @@ import { QuestionAddButton } from "./QuestionAddButton";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { toast, ToastContainer } from "react-toastify";
 import { QuestionTypeButton } from "./QuestionTypeButton";
+import { QuestionEditButton } from "./QuestionEditButton";
 
 interface QuestionsListProps {
   sectionId: string;
@@ -17,9 +18,6 @@ interface QuestionsListProps {
 
 export function QuestionsList({ sectionId }: QuestionsListProps) {
   const [enableQuery, setEnableQuery] = useState(false);
-  const [toggleEditQuestion, setToggleEditQuestion] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] =
-    useState<QuestionOutput | null>(null);
   const { setError } = useErrorContext();
 
   const { data: questions, isLoading } = trpc.useQuery(
@@ -44,25 +42,16 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     { label: "Tipo" },
     {
       element: (
-        // TODO fix prop drilling
         <QuestionAddButton
-          question={selectedQuestion}
           sectionId={sectionId}
           onQuestionAdded={() => {
             setEnableQuery(true);
-            setToggleEditQuestion(false);
           }}
-          toggle={toggleEditQuestion}
         />
       ),
       size: 20,
     },
   ];
-
-  function editQuestion(question: QuestionOutput) {
-    setSelectedQuestion(question);
-    setToggleEditQuestion(true);
-  }
 
   const deleteQuestion = trpc.useMutation(["questions.delete"], {
     onSuccess: () => {
@@ -78,7 +67,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
   }
 
   return (
-    <div>
+    <>
       <ToastContainer />
       {isLoading && <Loading />}
       <Table headings={headings}>
@@ -98,14 +87,10 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
               </TableCell>
               <TableCell>
                 <div className="space-x-2">
-                  <Button
-                    size="sm"
-                    variant="outlined"
-                    className="rounded-full p-1"
-                    onClick={() => editQuestion(question)}
-                  >
-                    <BiEdit className="text-lg" />
-                  </Button>
+                  <QuestionEditButton
+                    question={question}
+                    onQuestionMutate={() => setEnableQuery(true)}
+                  />
                   <Button
                     variant="outlined"
                     size="sm"
@@ -121,6 +106,6 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
             </TableRow>
           ))}
       </Table>
-    </div>
+    </>
   );
 }

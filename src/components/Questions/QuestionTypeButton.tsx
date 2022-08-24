@@ -56,7 +56,7 @@ export function QuestionTypeButton({
       <Dialog
         handler={setToggleMultipleChoiceDialog}
         open={toggleMultiplechoiceDialog}
-        size="lg"
+        size="md"
       >
         <DialogHeader>Opções</DialogHeader>
         <DialogBody>
@@ -77,7 +77,7 @@ export function QuestionTypeButton({
         </DialogBody>
       </Dialog>
 
-      <Dialog handler={setToggleFileDialog} open={toggleFileDialog} size="lg">
+      <Dialog handler={setToggleFileDialog} open={toggleFileDialog} size="md">
         <DialogHeader>Tipos de Arquivo</DialogHeader>
         <DialogBody>
           <div className="w-full space-y-2">

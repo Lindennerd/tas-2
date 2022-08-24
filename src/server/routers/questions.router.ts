@@ -1,4 +1,7 @@
-import { questionInputSchema } from "./../../schemas/question.schema";
+import {
+  questionInputSchema,
+  questionUpdateSchema,
+} from "@/schemas/question.schema";
 import { createRouter } from "../context/context";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
@@ -74,6 +77,15 @@ export const questionsRouter = createRouter()
     input: questionInputSchema,
     async resolve({ ctx, input }) {
       return await ctx.prisma.question.create({
+        data: input,
+      });
+    },
+  })
+  .mutation("update", {
+    input: questionUpdateSchema,
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.question.update({
+        where: { id: input.id },
         data: input,
       });
     },

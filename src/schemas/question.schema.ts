@@ -20,6 +20,10 @@ export const questionInputSchema = z.object({
   sectionId: z.string(),
 });
 
+export const questionUpdateSchema = questionInputSchema.extend({
+  id: z.string(),
+});
+
 export enum QuestionType {
   text = "Texto",
   multipleChoice = "Múltipla escolha",

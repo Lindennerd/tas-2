@@ -1,23 +1,9 @@
 import { useErrorContext } from "@/context/error.context";
-import { Option } from "@/schemas/option.schema";
-import { Question, QuestionType } from "@/schemas/question.schema";
+import { QuestionOutput, QuestionType } from "@/schemas/question.schema";
 import { trpc } from "@/utils/trpc";
-import {
-  Button,
-  Input,
-  Tab,
-  TabPanel,
-  Tabs,
-  TabsBody,
-  TabsHeader,
-  Textarea,
-} from "@material-tailwind/react";
-import { useState } from "react";
+import { Button, Input, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
-import { FileFormChoiceForm } from "../Options/FileChoiceForm";
-import { MultipleChoiceForm } from "../Options/MultipleChoiceForm";
-import { OptionsList } from "../Options/OptionsList";
 import { FormError } from "../UI/FormError";
 
 export type QuestionForm = {
@@ -30,7 +16,7 @@ export type QuestionForm = {
 interface QuestionFormProps {
   sectionId: string;
   onSave: () => void;
-  question?: Question;
+  question?: QuestionOutput;
 }
 
 export function QuestionForm({
@@ -43,7 +29,14 @@ export function QuestionForm({
     handleSubmit,
     formState: { errors },
   } = useForm<QuestionForm>({
-    defaultValues: question ?? {},
+    defaultValues: question
+      ? {
+          help: question.help || undefined,
+          description: question.description,
+          type: question.type,
+          weight: question.weight,
+        }
+      : {},
   });
 
   const { setError } = useErrorContext();
@@ -56,12 +49,29 @@ export function QuestionForm({
     },
   });
 
+  const questionUpdate = trpc.useMutation(["questions.update"], {
+    onError: (error) => setError(error.message),
+    onSuccess: () => {
+      toast.success("Questão editada com sucesso!");
+      onSave();
+    },
+  });
+
   async function onSubmit(data: QuestionForm) {
-    await questionCreate.mutateAsync({
-      ...data,
-      weight: Number(data.weight),
-      sectionId,
-    });
+    if (question) {
+      await questionUpdate.mutateAsync({
+        ...data,
+        weight: Number(data.weight),
+        sectionId,
+        id: question.id,
+      });
+    } else {
+      await questionCreate.mutateAsync({
+        ...data,
+        weight: Number(data.weight),
+        sectionId,
+      });
+    }
   }
 
   return (
@@ -111,9 +121,6 @@ export function QuestionForm({
           <FormError>O Tipo da questão é obrigatório</FormError>
         )}
         <Button type="submit">Salvar</Button>
-        <Button color="red" onClick={() => onSave}>
-          Cancelar
-        </Button>
       </form>
     </div>
   );
