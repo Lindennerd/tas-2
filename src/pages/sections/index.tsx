@@ -1,5 +1,5 @@
 import { SectionList } from "@/components/Sections/SectionList";
-import { Filter, FilterForm } from "@/components/UI";
+import { Filter, FilterForm, Paper } from "@/components/UI";
 import Loading from "@/components/UI/Loading";
 import { useErrorContext } from "@/context/error.context";
 import { trpc } from "@/utils/trpc";
@@ -50,47 +50,51 @@ export default function SectionsPage() {
   return (
     <div className="p-2">
       {isLoading && <Loading />}
-      <div className="flex justify-between space-x-2">
-        <Filter onSubmit={onFilter} />
-        <Button
-          onClick={() => {
-            router.push("/sections/new");
-          }}
-          className="p-2 space-x-1 flex items-center whitespace-nowrap"
-          color="green"
-        >
-          <BiAddToQueue className="text-2xl" />
-          <span>Nova Seção</span>
-        </Button>
-      </div>
+      <Paper>
+        <div className="flex justify-between space-x-2">
+          <Filter onSubmit={onFilter} />
+          <Button
+            onClick={() => {
+              router.push("/sections/new");
+            }}
+            className="p-2 space-x-1 flex items-center whitespace-nowrap"
+            color="green"
+          >
+            <BiAddToQueue className="text-2xl" />
+            <span>Nova Seção</span>
+          </Button>
+        </div>
+      </Paper>
       <div className="mt-2">
-        {sections && (
-          <>
-            <SectionList
-              sections={sections}
-              onMutateSections={() => setEnableQuery(true)}
-            />
-            <div className="flex gap-4 items-center justify-between">
-              <Button
-                variant="outlined"
-                size="sm"
-                disabled={page <= 0}
-                onClick={() => previousPage()}
-              >
-                Anterior
-              </Button>
-              <div>Página {page + 1}</div>
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={() => nextPage()}
-                disabled={sections.length < 10}
-              >
-                Próxima
-              </Button>
-            </div>
-          </>
-        )}
+        <Paper>
+          {sections && (
+            <>
+              <SectionList
+                sections={sections}
+                onMutateSections={() => setEnableQuery(true)}
+              />
+              <div className="flex gap-4 items-center justify-between">
+                <Button
+                  variant="outlined"
+                  size="sm"
+                  disabled={page <= 0}
+                  onClick={() => previousPage()}
+                >
+                  Anterior
+                </Button>
+                <div>Página {page + 1}</div>
+                <Button
+                  variant="outlined"
+                  size="sm"
+                  onClick={() => nextPage()}
+                  disabled={sections.length < 10}
+                >
+                  Próxima
+                </Button>
+              </div>
+            </>
+          )}
+        </Paper>
       </div>
     </div>
   );
