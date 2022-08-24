@@ -1,22 +1,15 @@
 import { useErrorContext } from "@/context/error.context";
-import { Question, QuestionType } from "@/schemas/question.schema";
+import { QuestionOutput } from "@/schemas/question.schema";
 import { trpc } from "@/utils/trpc";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogHeader,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { MultipleChoiceForm } from "../Options/MultipleChoiceForm";
-import { OptionsList } from "../Options/OptionsList";
 import Loading from "../UI/Loading";
 import { Table, TableRow, TableCell, Heading } from "../UI/Table";
 import { QuestionAddButton } from "./QuestionAddButton";
 
-import { FileFormChoiceForm } from "../Options/FileChoiceForm";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { toast, ToastContainer } from "react-toastify";
+import { QuestionTypeButton } from "./QuestionTypeButton";
 
 interface QuestionsListProps {
   sectionId: string;
@@ -24,34 +17,21 @@ interface QuestionsListProps {
 
 export function QuestionsList({ sectionId }: QuestionsListProps) {
   const [enableQuery, setEnableQuery] = useState(false);
-  const [toggleMultiplechoiceDialog, setToggleMultipleChoiceDialog] =
-    useState(false);
-  const [toggleFileDialog, setToggleFileDialog] = useState(false);
   const [toggleEditQuestion, setToggleEditQuestion] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
-    null
-  );
+  const [selectedQuestion, setSelectedQuestion] =
+    useState<QuestionOutput | null>(null);
   const { setError } = useErrorContext();
 
-  const {
-    data: questions,
-    isLoading,
-    error,
-  } = trpc.useQuery(["questions.findManyBySection", { section: sectionId }], {
-    enabled: enableQuery,
-    onError: (error) => setError(error.message),
-    onSuccess: (data) => {
-      setEnableQuery(false);
-      if (selectedQuestion) {
-        const question = data.find(
-          (question) => question.id === selectedQuestion.id
-        );
-        if (question) {
-          setSelectedQuestion(question);
-        }
-      }
-    },
-  });
+  const { data: questions, isLoading } = trpc.useQuery(
+    ["questions.findManyBySection", { section: sectionId }],
+    {
+      enabled: enableQuery,
+      onError: (error) => setError(error.message),
+      onSuccess: (data) => {
+        setEnableQuery(false);
+      },
+    }
+  );
 
   useEffect(() => {
     if (sectionId) setEnableQuery(true);
@@ -79,39 +59,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     },
   ];
 
-  const getQuestionType = (type: string, question: Question) => {
-    const questionType =
-      Object.values(QuestionType)[Object.keys(QuestionType).indexOf(type)];
-    if (type === "multipleChoice")
-      return (
-        <Button
-          size="sm"
-          variant="outlined"
-          onClick={(e) => {
-            setSelectedQuestion(question);
-            setToggleMultipleChoiceDialog(true);
-          }}
-        >
-          Múltipla Escolha ({question?.Option.length})
-        </Button>
-      );
-    if (type === "file")
-      return (
-        <Button
-          size="sm"
-          variant="outlined"
-          onClick={(e) => {
-            setSelectedQuestion(question);
-            setToggleFileDialog(true);
-          }}
-        >
-          Arquivo
-        </Button>
-      );
-    else return <span>{questionType}</span>;
-  };
-
-  function editQuestion(question: Question) {
+  function editQuestion(question: QuestionOutput) {
     setSelectedQuestion(question);
     setToggleEditQuestion(true);
   }
@@ -124,7 +72,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     onError: (error) => setError(error.message),
   });
 
-  async function removeQuestion(question: Question) {
+  async function removeQuestion(question: QuestionOutput) {
     if (!question) return;
     await deleteQuestion.mutateAsync(question.id);
   }
@@ -140,7 +88,14 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
               <TableCell>{question.weight}</TableCell>
               <TableCell>{question.description}</TableCell>
               <TableCell>{question.help}</TableCell>
-              <TableCell>{getQuestionType(question.type, question)}</TableCell>
+              <TableCell>
+                {
+                  <QuestionTypeButton
+                    question={question}
+                    onMutateQuestion={() => setEnableQuery(true)}
+                  />
+                }
+              </TableCell>
               <TableCell>
                 <div className="space-x-2">
                   <Button
@@ -166,42 +121,6 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
             </TableRow>
           ))}
       </Table>
-
-      <Dialog
-        handler={setToggleMultipleChoiceDialog}
-        open={toggleMultiplechoiceDialog}
-        size="lg"
-      >
-        <DialogHeader>Opções</DialogHeader>
-        <DialogBody>
-          <div className="w-full space-y-2">
-            <MultipleChoiceForm
-              question={selectedQuestion}
-              onAddOption={() => setEnableQuery(true)}
-            />
-            <OptionsList
-              options={selectedQuestion?.Option}
-              onRemoveOption={() => setEnableQuery(true)}
-            />
-          </div>
-        </DialogBody>
-      </Dialog>
-
-      <Dialog handler={setToggleFileDialog} open={toggleFileDialog} size="lg">
-        <DialogHeader>Tipos de Arquivo</DialogHeader>
-        <DialogBody>
-          <div className="w-full space-y-2">
-            <FileFormChoiceForm
-              questionId={selectedQuestion ? selectedQuestion.id : ""}
-              extension={selectedQuestion?.Extensions[0]}
-              onSaveExtensions={() => {
-                setEnableQuery(true);
-                setToggleFileDialog(!toggleFileDialog);
-              }}
-            />
-          </div>
-        </DialogBody>
-      </Dialog>
     </div>
   );
 }

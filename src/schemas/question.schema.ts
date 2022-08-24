@@ -1,7 +1,7 @@
 import { extensionSchema } from "./extension.schema";
 import { optionSchema } from "./option.schema";
-import { z } from "zod";
 import { inferQueryOutput } from "@/utils/trpc";
+import { z } from "zod";
 
 export const questionSchema = z.object({
   id: z.string(),
@@ -26,4 +26,4 @@ export enum QuestionType {
   file = "Arquivo",
 }
 
-export type Question = inferQueryOutput<"questions.findOne">;
+export type QuestionOutput = inferQueryOutput<"questions.findOne">;
