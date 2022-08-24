@@ -11,7 +11,6 @@ import { BiAddToQueue } from "react-icons/bi";
 export default function SectionsPage() {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
-  const [enableQuery, setEnableQuery] = useState(false);
   const { setError } = useErrorContext();
 
   const router = useRouter();
@@ -20,31 +19,24 @@ export default function SectionsPage() {
     data: sections,
     isLoading,
     error,
+    refetch,
   } = trpc.useQuery(["sections.findMany", { filter, page }], {
-    enabled: enableQuery,
     onError: (error) => setError(error.message),
-    onSuccess: (data) => {
-      setEnableQuery(false);
-    },
   });
-
-  useEffect(() => {
-    setEnableQuery(true);
-  }, []);
 
   function onFilter(filter: FilterForm) {
     setFilter(filter.filter);
-    setEnableQuery(true);
+    refetch();
   }
 
   function previousPage() {
     setPage((curr) => curr - 1);
-    setEnableQuery(true);
+    refetch();
   }
 
   function nextPage() {
     setPage((curr) => curr + 1);
-    setEnableQuery(true);
+    refetch();
   }
 
   return (
@@ -71,7 +63,7 @@ export default function SectionsPage() {
             <>
               <SectionList
                 sections={sections}
-                onMutateSections={() => setEnableQuery(true)}
+                onMutateSections={() => refetch()}
               />
               <div className="flex gap-4 items-center justify-between">
                 <Button

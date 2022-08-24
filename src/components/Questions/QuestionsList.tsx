@@ -17,23 +17,15 @@ interface QuestionsListProps {
 }
 
 export function QuestionsList({ sectionId }: QuestionsListProps) {
-  const [enableQuery, setEnableQuery] = useState(false);
   const { setError } = useErrorContext();
 
-  const { data: questions, isLoading } = trpc.useQuery(
-    ["questions.findManyBySection", { section: sectionId }],
-    {
-      enabled: enableQuery,
-      onError: (error) => setError(error.message),
-      onSuccess: (data) => {
-        setEnableQuery(false);
-      },
-    }
-  );
-
-  useEffect(() => {
-    if (sectionId) setEnableQuery(true);
-  }, []);
+  const {
+    data: questions,
+    isLoading,
+    refetch,
+  } = trpc.useQuery(["questions.findManyBySection", { section: sectionId }], {
+    onError: (error) => setError(error.message),
+  });
 
   const headings: Heading[] = [
     { label: "Peso", size: 16 },
@@ -44,9 +36,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
       element: (
         <QuestionAddButton
           sectionId={sectionId}
-          onQuestionAdded={() => {
-            setEnableQuery(true);
-          }}
+          onQuestionAdded={() => refetch()}
         />
       ),
       size: 20,
@@ -55,7 +45,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
 
   const deleteQuestion = trpc.useMutation(["questions.delete"], {
     onSuccess: () => {
-      setEnableQuery(true);
+      refetch();
       toast.warn("Questão deletada");
     },
     onError: (error) => setError(error.message),
@@ -81,7 +71,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
                 {
                   <QuestionTypeButton
                     question={question}
-                    onMutateQuestion={() => setEnableQuery(true)}
+                    onMutateQuestion={() => refetch()}
                   />
                 }
               </TableCell>
@@ -89,7 +79,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
                 <div className="space-x-2">
                   <QuestionEditButton
                     question={question}
-                    onQuestionMutate={() => setEnableQuery(true)}
+                    onQuestionMutate={() => refetch()}
                   />
                   <Button
                     variant="outlined"
