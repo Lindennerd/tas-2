@@ -7,7 +7,7 @@ import Loading from "../UI/Loading";
 import { Table, TableRow, TableCell, Heading } from "../UI/Table";
 import { QuestionAddButton } from "./QuestionAddButton";
 
-import { BiEdit, BiTrash } from "react-icons/bi";
+import { BiTrash } from "react-icons/bi";
 import { toast, ToastContainer } from "react-toastify";
 import { QuestionTypeButton } from "./QuestionTypeButton";
 import { QuestionEditButton } from "./QuestionEditButton";

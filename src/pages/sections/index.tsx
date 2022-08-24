@@ -10,6 +10,7 @@ import { BiAddToQueue } from "react-icons/bi";
 
 export default function SectionsPage() {
   const [filter, setFilter] = useState("");
+  const [page, setPage] = useState(0);
   const [enableQuery, setEnableQuery] = useState(false);
   const { setError } = useErrorContext();
 
@@ -19,7 +20,7 @@ export default function SectionsPage() {
     data: sections,
     isLoading,
     error,
-  } = trpc.useQuery(["sections.findMany", { filter }], {
+  } = trpc.useQuery(["sections.findMany", { filter, page }], {
     enabled: enableQuery,
     onError: (error) => setError(error.message),
     onSuccess: (data) => {
@@ -33,6 +34,16 @@ export default function SectionsPage() {
 
   function onFilter(filter: FilterForm) {
     setFilter(filter.filter);
+    setEnableQuery(true);
+  }
+
+  function previousPage() {
+    setPage((curr) => curr - 1);
+    setEnableQuery(true);
+  }
+
+  function nextPage() {
+    setPage((curr) => curr + 1);
     setEnableQuery(true);
   }
 
@@ -54,10 +65,31 @@ export default function SectionsPage() {
       </div>
       <div className="mt-2">
         {sections && (
-          <SectionList
-            sections={sections}
-            onMutateSections={() => setEnableQuery(true)}
-          />
+          <>
+            <SectionList
+              sections={sections}
+              onMutateSections={() => setEnableQuery(true)}
+            />
+            <div className="flex gap-4 items-center justify-between">
+              <Button
+                variant="outlined"
+                size="sm"
+                disabled={page <= 0}
+                onClick={() => previousPage()}
+              >
+                Anterior
+              </Button>
+              <div>Página {page + 1}</div>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => nextPage()}
+                disabled={sections.length < 10}
+              >
+                Próxima
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </div>

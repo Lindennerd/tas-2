@@ -37,6 +37,8 @@ const sectionSelect = {
   },
 };
 
+const PAGE_SIZE = 10;
+
 export const sectionsRouter = createRouter()
   .middleware(({ ctx, next }) => {
     if (!ctx.session || !ctx.session.user) {
@@ -52,11 +54,15 @@ export const sectionsRouter = createRouter()
   .query("findMany", {
     input: z.object({
       filter: z.string(),
+      page: z.number().default(0),
     }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.section.findMany({
+        take: PAGE_SIZE,
+        skip: PAGE_SIZE * input.page,
         where: { name: { contains: input.filter } },
         select: sectionSelect,
+        orderBy: { name: "asc" },
       });
     },
   })
