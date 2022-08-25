@@ -1,6 +1,7 @@
 import { SectionList } from "@/components/Sections/SectionList";
 import { Filter, FilterForm, Paper } from "@/components/UI";
 import Loading from "@/components/UI/Loading";
+import Pagination from "@/components/UI/Pagination";
 import { useErrorContext } from "@/context/error.context";
 import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
@@ -65,25 +66,12 @@ export default function SectionsPage() {
                 sections={sections}
                 onMutateSections={() => refetch()}
               />
-              <div className="flex gap-4 items-center justify-between">
-                <Button
-                  variant="outlined"
-                  size="sm"
-                  disabled={page <= 0}
-                  onClick={() => previousPage()}
-                >
-                  Anterior
-                </Button>
-                <div>Página {page + 1}</div>
-                <Button
-                  variant="outlined"
-                  size="sm"
-                  onClick={() => nextPage()}
-                  disabled={sections.length < 10}
-                >
-                  Próxima
-                </Button>
-              </div>
+              <Pagination
+                itensCount={sections.length}
+                next={nextPage}
+                previous={previousPage}
+                page={page}
+              />
             </>
           )}
         </Paper>

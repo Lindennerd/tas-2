@@ -28,7 +28,7 @@ export function SectionList({ sections, onMutateSections }: SectionListProps) {
     {
       label: "Descrição",
     },
-    { label: "Obrigatória" },
+    { label: "Obrigatória", size: 10 },
     { label: "" },
   ];
 
@@ -56,7 +56,7 @@ export function SectionList({ sections, onMutateSections }: SectionListProps) {
             <TableCell>{section?.name}</TableCell>
             <TableCell>{section?.description}</TableCell>
             <TableCell>
-              <div className="text-center">
+              <div className="flex justify-center items-center">
                 {section?.required ? (
                   <AiOutlineCheckCircle className="text-lg text-green-500" />
                 ) : (
@@ -65,7 +65,7 @@ export function SectionList({ sections, onMutateSections }: SectionListProps) {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex space-x-2">
+              <div className="flex gap-2 items-center justify-center">
                 <Button
                   className="p-1 rounded-full"
                   onClick={(e) => editSection(section)}

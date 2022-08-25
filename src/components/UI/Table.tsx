@@ -22,7 +22,7 @@ export function Table({ headings, children }: TableProps) {
                     <th
                       key={index}
                       className={`px-6 py-4 text-left ${
-                        heading.size ? `w-${heading.size}` : ""
+                        heading.size ? `w-[${heading.size}px]` : ""
                       }`}
                       scope="col"
                     >

@@ -1,27 +1,43 @@
 import { AssetOutput } from "@/schemas/asset.schema";
-import { Tooltip } from "@material-tailwind/react";
+import { Button, Tooltip } from "@material-tailwind/react";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { Heading, Table, TableCell, TableRow } from "../UI/Table";
 
 interface AssetListProps {
   assets: AssetOutput[];
 }
 
 export function AssetList(props: AssetListProps) {
+  const headings: Heading[] = [
+    { label: "Nome" },
+    { label: "Descrição" },
+    { label: "URL" },
+    { label: "Criado em" },
+    { label: "" },
+  ];
   return (
     <div className="p-2">
-      <div className="flex flex-wrap gap-2">
+      <Table headings={headings}>
         {props.assets &&
           props.assets.map((asset: AssetOutput) => (
-            <Tooltip
-              key={asset.id}
-              content={asset.description}
-              placement="bottom"
-            >
-              <div className="p-2 border rounded hover:shadow">
-                {asset.name}
-              </div>
-            </Tooltip>
+            <TableRow>
+              <TableCell>{asset?.name}</TableCell>
+              <TableCell>{asset?.description}</TableCell>
+              <TableCell>{asset?.url}</TableCell>
+              <TableCell>{asset?.createdAt.toString()}</TableCell>
+              <TableCell>
+                <div className="flex gap-2 items-center justify-center">
+                  <Button className="p-1 rounded-full">
+                    <BiEdit className="text-lg" />
+                  </Button>
+                  <Button className="p-1 rounded-full" color="red">
+                    <BiTrash className="text-lg" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
           ))}
-      </div>
+      </Table>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import {
   assetInputSchema,
   assetEditSchema,
-  Asset,
+  AssetOutput,
 } from "./../../schemas/asset.schema";
 import { createRouter } from "../context/context";
 import * as trpc from "@trpc/server";
@@ -35,6 +35,8 @@ const assetSelect = {
   },
 };
 
+const PAGE_SIZE = 10;
+
 export const assetRouter = createRouter()
   .middleware(({ ctx, next }) => {
     if (!ctx.session || !ctx.session.user) {
@@ -48,21 +50,24 @@ export const assetRouter = createRouter()
     });
   })
   .query("findMany", {
-    input: z.object({ filter: z.string() }),
-    async resolve({ ctx, input }): Promise<Asset[]> {
+    input: z.object({ filter: z.string(), page: z.number().default(0) }),
+    async resolve({ ctx, input }) {
       return ctx.prisma.asset.findMany({
+        take: PAGE_SIZE,
+        skip: input.page * PAGE_SIZE,
         where: {
           name: {
             contains: input.filter,
           },
         },
         select: assetSelect,
+        orderBy: { name: "asc" },
       });
     },
   })
   .query("findFirst", {
     input: z.object({ id: z.string() }),
-    async resolve({ ctx, input }): Promise<Asset | null> {
+    async resolve({ ctx, input }) {
       return ctx.prisma.asset.findFirst({
         where: {
           id: input.id,
