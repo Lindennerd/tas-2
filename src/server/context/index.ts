@@ -1,3 +1,4 @@
+import { manifestRouter } from "./../routers/manifest.router";
 import { optionsRouter } from "./../routers/options.router";
 import { questionsRouter } from "./../routers/questions.router";
 import { assetRouter } from "./../routers/assets.router";
@@ -14,6 +15,7 @@ export const appRouter = createRouter()
   .merge("sections.", sectionsRouter)
   .merge("questions.", questionsRouter)
   .merge("options.", optionsRouter)
-  .merge("extensions.", fileExtensionsRouter);
+  .merge("extensions.", fileExtensionsRouter)
+  .merge("manifest.", manifestRouter);
 
 export type AppRouter = typeof appRouter;

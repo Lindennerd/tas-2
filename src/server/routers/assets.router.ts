@@ -92,6 +92,48 @@ export const assetRouter = createRouter()
       });
     },
   })
+  .mutation("createWithManifest", {
+    input: assetInputSchema,
+    async resolve({ ctx, input }) {
+      const asset = await ctx.prisma.asset.create({
+        select: assetSelect,
+        data: {
+          ...input,
+          user: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      const requiredSections = await ctx.prisma.section.findMany({
+        where: { required: true },
+      });
+
+      await ctx.prisma.manifest.create({
+        data: {
+          asset: {
+            connect: {
+              id: asset.id,
+            },
+          },
+          user: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+          sections: {
+            connect: requiredSections.map((section) => {
+              return { id: section.id };
+            }),
+          },
+        },
+      });
+
+      return asset;
+    },
+  })
   .mutation("edit", {
     input: assetEditSchema,
     async resolve({ ctx, input }) {

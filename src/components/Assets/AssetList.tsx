@@ -23,7 +23,7 @@ export function AssetList(props: AssetListProps) {
       <Table headings={headings}>
         {props.assets &&
           props.assets.map((asset: AssetOutput) => (
-            <TableRow>
+            <TableRow key={asset?.id}>
               <TableCell>{asset?.name}</TableCell>
               <TableCell>{asset?.description}</TableCell>
               <TableCell>{asset?.url}</TableCell>

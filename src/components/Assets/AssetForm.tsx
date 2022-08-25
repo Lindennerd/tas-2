@@ -21,7 +21,7 @@ export function AssetForm({ asset, setAsset }: IAssetFormProps) {
 
   const { setError } = useErrorContext();
 
-  const createAsset = trpc.useMutation(["assets.create"], {
+  const createAsset = trpc.useMutation(["assets.createWithManifest"], {
     onError: (error) => {
       setError(error.message);
     },
