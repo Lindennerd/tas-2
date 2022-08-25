@@ -1,3 +1,4 @@
+import { useFormatDate } from "@/hooks/useFormatDate";
 import { AssetOutput } from "@/schemas/asset.schema";
 import { Button, Tooltip } from "@material-tailwind/react";
 import { BiEdit, BiTrash } from "react-icons/bi";
@@ -8,6 +9,8 @@ interface AssetListProps {
 }
 
 export function AssetList(props: AssetListProps) {
+  const formatDate = useFormatDate();
+
   const headings: Heading[] = [
     { label: "Nome" },
     { label: "Descrição" },
@@ -24,7 +27,7 @@ export function AssetList(props: AssetListProps) {
               <TableCell>{asset?.name}</TableCell>
               <TableCell>{asset?.description}</TableCell>
               <TableCell>{asset?.url}</TableCell>
-              <TableCell>{asset?.createdAt.toString()}</TableCell>
+              <TableCell>{formatDate(asset?.createdAt)}</TableCell>
               <TableCell>
                 <div className="flex gap-2 items-center justify-center">
                   <Button className="p-1 rounded-full">

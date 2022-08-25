@@ -30,7 +30,7 @@ const NewAsset: NextPage = () => {
             label: "Manifesto",
             component: (
               <Paper>
-                <ManifestForm />
+                <ManifestForm {...asset} />
               </Paper>
             ),
           },
