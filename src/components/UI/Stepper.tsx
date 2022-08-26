@@ -24,7 +24,7 @@ export function Stepper({ steps }: StepperProps) {
       {steps.map((step, index) => (
         <li
           // acivate the first element on load
-          className={`stepper-step ${index === 0 ?? "stepper-active"}`}
+          className={`stepper-step ${index === 0 ? "stepper-active" : ""}`}
           key={index}
         >
           <div className="stepper-head">

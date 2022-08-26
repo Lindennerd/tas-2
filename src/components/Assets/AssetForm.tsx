@@ -69,11 +69,13 @@ export function AssetForm({ asset, setAsset }: IAssetFormProps) {
             label="Endereço (URL, servidor etc...)"
             {...register("url", { required: false })}
           />
+          <p className="text-sm text-gray-500 mt-2">Campo opcional</p>
         </div>
-
-        <Button type="submit" variant="filled">
-          Salvar
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" variant="filled" color="green">
+            Salvar
+          </Button>
+        </div>
       </form>
       <ToastContainer />
     </>
