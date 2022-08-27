@@ -24,6 +24,7 @@ const selectManifest = {
           help: true,
           type: true,
           weight: true,
+          sectionId: true,
           Option: {
             select: {
               description: true,

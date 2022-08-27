@@ -42,18 +42,16 @@ export function ManifestForm(props: ManifestFormProps) {
         <SectionPick onPick={(sectionId) => setSectionPicked(sectionId)} />
       </Paper>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 w-full">
         <Paper>
           <div>Sections</div>
         </Paper>
-        <Paper>
+        <div className="flex-1">
           {sections &&
             sections.map((section) => (
-              <div key={section?.id}>
-                <ManifestSection section={section} />
-              </div>
+              <ManifestSection section={section} key={section?.id} />
             ))}
-        </Paper>
+        </div>
       </div>
     </div>
   );
