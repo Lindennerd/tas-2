@@ -66,6 +66,17 @@ export const sectionsRouter = createRouter()
       });
     },
   })
+  .query("findAllOptionals", {
+    async resolve({ ctx }) {
+      return await ctx.prisma.section.findMany({
+        where: { required: false },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+    },
+  })
   .query("findFirst", {
     input: z.string(),
     async resolve({ ctx, input }) {

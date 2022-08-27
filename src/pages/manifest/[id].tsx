@@ -1,4 +1,6 @@
+import { ManifestForm } from "@/components/Manifests/ManifestForm";
 import { useErrorContext } from "@/context/error.context";
+import { UnsavedChangesProvider } from "@/context/manifest.changes.context";
 import { trpc } from "@/utils/trpc";
 import { useRouter } from "next/router";
 
@@ -18,11 +20,15 @@ export default function ManifestEditPage(props: ManifestEditPageProps) {
     [
       "manifest.findByAsset",
       {
-        assetId: id ?? "",
+        assetId: (id as string) ?? "",
       },
     ],
     { onError: (error) => setError(error.message) }
   );
 
-  return <div>manifest edit</div>;
+  return (
+    <UnsavedChangesProvider>
+      <ManifestForm manifest={manifest!} />
+    </UnsavedChangesProvider>
+  );
 }

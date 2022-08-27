@@ -4,15 +4,26 @@ import * as trpc from "@trpc/server";
 
 const selectManifest = {
   id: true,
-  assetId: true,
+  asset: {
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+    },
+  },
   sections: {
     select: {
       id: true,
       name: true,
       description: true,
+      required: true,
       questions: {
         select: {
           description: true,
+          id: true,
+          help: true,
+          type: true,
+          weight: true,
           Option: {
             select: {
               description: true,

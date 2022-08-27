@@ -1,47 +1,58 @@
 import { useErrorContext } from "@/context/error.context";
+import { useFormatDate } from "@/hooks/useFormatDate";
 import { AssetOutput } from "@/schemas/asset.schema";
+import { manifestInputSchema, ManifestOutput } from "@/schemas/manifest.schema";
 import { trpc } from "@/utils/trpc";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { SectionPick } from "../Sections/SectionPick";
+import { Paper } from "../UI";
+
+import { SectionOutput } from "@/schemas/section.schema";
+import useQuerySection from "@/hooks/useQuerySection";
 
 interface ManifestFormProps {
-  asset: AssetOutput;
+  manifest: ManifestOutput;
 }
 
 export function ManifestForm(props: ManifestFormProps) {
-  const { setError } = useErrorContext();
+  const formatDate = useFormatDate();
+  const { querySection } = useQuerySection();
+  const [sections, setSections] = useState<SectionOutput[]>();
+  const [sectionPicked, setSectionPicked] = useState("");
 
-  const {
-    data: manifest,
-    isLoading,
-    refetch,
-  } = trpc.useQuery(
-    [
-      "manifest.findByAsset",
-      {
-        assetId: props.asset?.id ?? null,
-      },
-    ],
-    { enabled: false, onError: (error) => setError(error.message) }
-  );
+  querySection(sectionPicked, {
+    enabled: sectionPicked !== "",
+    onSuccess: (section: SectionOutput) =>
+      setSections((curr) => [...curr!, section]),
+  });
 
   useEffect(() => {
-    refetch();
-  }, [props.asset]);
-
-  if (!props.asset)
-    return (
-      <div className="flex items-center justify-center">
-        <span className="border border-blue-500 rounded p-2 bg-blue-500 text-white">
-          Você precisa primeiro fornecer as informações básicas do ativo
-        </span>
-      </div>
-    );
+    setSections(props.manifest?.sections);
+  }, [props.manifest]);
 
   return (
-    <div>
-      {manifest?.sections.map((section) => (
-        <div key={section.id}>{section.name}</div>
-      ))}
+    <div className="px-4 space-y-2">
+      <Paper>
+        <h1 className="uppercase text-center font-semibold">
+          Manifesto do Ativo {props.manifest?.asset.name}
+        </h1>
+        <p className="text-center text-gray-600">
+          Cadastrado em {formatDate(props.manifest?.asset.createdAt)}
+        </p>
+      </Paper>
+
+      <Paper>
+        <SectionPick onPick={(sectionId) => setSectionPicked(sectionId)} />
+      </Paper>
+
+      <div className="flex flex-wrap gap-2">
+        <Paper>
+          <div>Sections</div>
+        </Paper>
+        <Paper>
+          {sections && sections.map((section) => <div>{section?.name}</div>)}
+        </Paper>
+      </div>
     </div>
   );
 }
