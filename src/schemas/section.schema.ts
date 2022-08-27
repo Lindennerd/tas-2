@@ -21,4 +21,4 @@ export const sectionEditSchema = sectionInputSchema.extend({
 
 export type SectionInput = z.infer<typeof sectionInputSchema>;
 export type SectionEdit = z.infer<typeof sectionEditSchema>;
-export type SectionOutput = inferQueryOutput<"sections.findFirst">;
+export type Section = inferQueryOutput<"sections.findFirst">;

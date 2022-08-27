@@ -11,6 +11,7 @@ export default createNextApiHandler({
   router: appRouter,
   createContext: createContext,
   onError: (error) => {
-    logger.error(error);
+    logger.error(error.error.message);
+    logger.error(error.error.stack);
   },
 });

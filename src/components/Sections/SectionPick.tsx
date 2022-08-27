@@ -1,5 +1,5 @@
 import useSectionService from "@/hooks/useSectionService";
-import { SectionOutput } from "@/schemas/section.schema";
+import { Section } from "@/schemas/section.schema";
 import { Button } from "@material-tailwind/react";
 import { useState } from "react";
 import Select from "react-select";
@@ -21,7 +21,7 @@ export function SectionPick(props: SectionPickProps) {
   );
 
   findAllOptionals({
-    onSuccess: (sections: SectionOutput[]) => {
+    onSuccess: (sections: Section[]) => {
       setOptions(
         sections?.map((section) => {
           return { value: section!.id, label: section!.name };

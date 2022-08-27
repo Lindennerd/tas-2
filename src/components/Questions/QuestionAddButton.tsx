@@ -4,7 +4,7 @@ import { BiAddToQueue } from "react-icons/bi";
 import { QuestionFormModal } from "./QuestionFormModal";
 
 interface QuestionAddButtonProps {
-  sectionId: string;
+  sectionId: string | undefined;
   onQuestionAdded: () => void;
 }
 
@@ -38,7 +38,7 @@ export function QuestionAddButton({
 
       <QuestionFormModal
         open={open}
-        sectionId={sectionId}
+        sectionId={sectionId!}
         handleOpen={handleOpen}
         onQuestionMutated={onQuestionAdded}
       />

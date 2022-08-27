@@ -1,9 +1,9 @@
-import { SectionOutput } from "@/schemas/section.schema";
+import { Section } from "@/schemas/section.schema";
 import { Button, Typography } from "@material-tailwind/react";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 interface SectionCardProps {
-  section: SectionOutput;
+  section: Section;
 }
 
 export function SectionCard({ section }: SectionCardProps) {

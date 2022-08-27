@@ -1,12 +1,13 @@
 import useSectionService from "@/hooks/useSectionService";
-import { SectionOutput, SectionInput } from "@/schemas/section.schema";
+import { Section, SectionInput } from "@/schemas/section.schema";
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
+import { BiSave } from "react-icons/bi";
 import { toast, ToastContainer } from "react-toastify";
 
 interface ISectionFormProps {
-  onMutatedSection?: (mutated: SectionOutput) => void;
-  section?: SectionOutput;
+  onMutatedSection?: (mutated: Section) => void;
+  section?: Section;
 }
 
 export default function SectionForm({
@@ -52,7 +53,7 @@ export default function SectionForm({
           <span>A descrição é obrigatória</span>
         )}
       </div>
-      <div>
+      <div className="flex justify-between">
         <div className="form-check">
           <input
             className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
@@ -67,11 +68,17 @@ export default function SectionForm({
             Seção Obrigatória
           </label>
         </div>
+        <Button
+          size="md"
+          type="submit"
+          variant="filled"
+          color="green"
+          className="flex gap-2 items-center"
+        >
+          <BiSave className="text-lg" />
+          <span>Salvar</span>
+        </Button>
       </div>
-
-      <Button type="submit" variant="filled">
-        Salvar
-      </Button>
 
       <ToastContainer />
     </form>

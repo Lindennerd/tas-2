@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { SectionPick } from "../Sections/SectionPick";
 import { Paper } from "../UI";
 
-import { SectionOutput } from "@/schemas/section.schema";
+import { Section } from "@/schemas/section.schema";
 import useSectionService from "@/hooks/useSectionService";
+import { ManifestSection } from "./ManifestSection";
 
 interface ManifestFormProps {
   manifest: ManifestOutput;
@@ -14,13 +15,12 @@ interface ManifestFormProps {
 export function ManifestForm(props: ManifestFormProps) {
   const formatDate = useFormatDate();
   const { findFirst } = useSectionService();
-  const [sections, setSections] = useState<SectionOutput[]>();
+  const [sections, setSections] = useState<Section[]>();
   const [sectionPicked, setSectionPicked] = useState("");
 
   findFirst(sectionPicked, {
     enabled: sectionPicked !== "",
-    onSuccess: (section: SectionOutput) =>
-      setSections((curr) => [...curr!, section]),
+    onSuccess: (section: Section) => setSections((curr) => [...curr!, section]),
   });
 
   useEffect(() => {
@@ -47,7 +47,12 @@ export function ManifestForm(props: ManifestFormProps) {
           <div>Sections</div>
         </Paper>
         <Paper>
-          {sections && sections.map((section) => <div>{section?.name}</div>)}
+          {sections &&
+            sections.map((section) => (
+              <div key={section?.id}>
+                <ManifestSection section={section} />
+              </div>
+            ))}
         </Paper>
       </div>
     </div>

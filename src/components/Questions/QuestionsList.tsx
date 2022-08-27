@@ -1,23 +1,21 @@
-import { useErrorContext } from "@/context/error.context";
 import { QuestionOutput } from "@/schemas/question.schema";
-import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
 import Loading from "../UI/Loading";
 import { Table, TableRow, TableCell, Heading } from "../UI/Table";
 import { QuestionAddButton } from "./QuestionAddButton";
 
 import { BiTrash } from "react-icons/bi";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { QuestionTypeButton } from "./QuestionTypeButton";
 import { QuestionEditButton } from "./QuestionEditButton";
 import { useQuestionService } from "@/hooks/useQuestionService";
 
 interface QuestionsListProps {
   sectionId: string;
+  canAdd: boolean;
 }
 
-export function QuestionsList({ sectionId }: QuestionsListProps) {
+export function QuestionsList({ sectionId, canAdd }: QuestionsListProps) {
   const { findManyBySection, delete: remove } = useQuestionService();
 
   const { data: questions, isLoading, refetch } = findManyBySection(sectionId);
@@ -30,7 +28,7 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     {
       element: (
         <QuestionAddButton
-          sectionId={sectionId}
+          sectionId={canAdd ? sectionId : undefined}
           onQuestionAdded={() => refetch()}
         />
       ),
