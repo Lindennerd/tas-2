@@ -16,4 +16,5 @@ export const extensionUpdateSchema = extensionInputSchema.extend({
 });
 
 export type ExtensionInput = z.infer<typeof extensionInputSchema>;
+export type ExtensionUpdate = z.infer<typeof extensionUpdateSchema>;
 export type ExtensionOutput = inferQueryOutput<"extensions.findFirst">;

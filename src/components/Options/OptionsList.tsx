@@ -1,4 +1,5 @@
 import { useErrorContext } from "@/context/error.context";
+import { useMultipleChoiceService } from "@/hooks/useMultipleChoiceService";
 import { Option } from "@/schemas/option.schema";
 import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
@@ -12,16 +13,13 @@ interface OptionsListProps {
 }
 
 export function OptionsList({ options, onRemoveOption }: OptionsListProps) {
-  const { setError } = useErrorContext();
   const [isLoading, setIsLoading] = useState(false);
-  const removeOptionMutation = trpc.useMutation(["options.delete"], {
-    onError: (error) => setError(error.message),
-    onSuccess: () => setIsLoading(false),
-  });
+  const { remove } = useMultipleChoiceService();
 
   async function removeOption(option: Option) {
     setIsLoading(true);
-    await removeOptionMutation.mutateAsync({ id: option.id });
+    await remove(option.id);
+    setIsLoading(false);
     onRemoveOption && onRemoveOption();
   }
 

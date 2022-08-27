@@ -1,14 +1,11 @@
-import { useErrorContext } from "@/context/error.context";
 import { useFormatDate } from "@/hooks/useFormatDate";
-import { AssetOutput } from "@/schemas/asset.schema";
-import { manifestInputSchema, ManifestOutput } from "@/schemas/manifest.schema";
-import { trpc } from "@/utils/trpc";
+import { ManifestOutput } from "@/schemas/manifest.schema";
 import { useEffect, useState } from "react";
 import { SectionPick } from "../Sections/SectionPick";
 import { Paper } from "../UI";
 
 import { SectionOutput } from "@/schemas/section.schema";
-import useQuerySection from "@/hooks/useQuerySection";
+import useSectionService from "@/hooks/useSectionService";
 
 interface ManifestFormProps {
   manifest: ManifestOutput;
@@ -16,11 +13,11 @@ interface ManifestFormProps {
 
 export function ManifestForm(props: ManifestFormProps) {
   const formatDate = useFormatDate();
-  const { querySection } = useQuerySection();
+  const { findFirst } = useSectionService();
   const [sections, setSections] = useState<SectionOutput[]>();
   const [sectionPicked, setSectionPicked] = useState("");
 
-  querySection(sectionPicked, {
+  findFirst(sectionPicked, {
     enabled: sectionPicked !== "",
     onSuccess: (section: SectionOutput) =>
       setSections((curr) => [...curr!, section]),

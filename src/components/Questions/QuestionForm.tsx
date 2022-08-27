@@ -1,6 +1,5 @@
-import { useErrorContext } from "@/context/error.context";
+import { useQuestionService } from "@/hooks/useQuestionService";
 import { QuestionOutput, QuestionType } from "@/schemas/question.schema";
-import { trpc } from "@/utils/trpc";
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
@@ -39,39 +38,26 @@ export function QuestionForm({
       : {},
   });
 
-  const { setError } = useErrorContext();
-
-  const questionCreate = trpc.useMutation(["questions.create"], {
-    onError: (error) => setError(error.message),
-    onSuccess: () => {
-      toast.success("Questão salva com sucesso!");
-      onSave();
-    },
-  });
-
-  const questionUpdate = trpc.useMutation(["questions.update"], {
-    onError: (error) => setError(error.message),
-    onSuccess: () => {
-      toast.success("Questão editada com sucesso!");
-      onSave();
-    },
-  });
+  const { create, update } = useQuestionService();
 
   async function onSubmit(data: QuestionForm) {
     if (question) {
-      await questionUpdate.mutateAsync({
+      await update({
         ...data,
         weight: Number(data.weight),
         sectionId,
         id: question.id,
       });
     } else {
-      await questionCreate.mutateAsync({
+      await create({
         ...data,
         weight: Number(data.weight),
         sectionId,
       });
     }
+
+    toast.success("Questão salva com sucesso!");
+    onSave();
   }
 
   return (

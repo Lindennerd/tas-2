@@ -9,8 +9,7 @@ import {
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useState } from "react";
 import SectionForm from "./SectionForm";
-import { trpc } from "@/utils/trpc";
-import { useErrorContext } from "@/context/error.context";
+import useSectionService from "@/hooks/useSectionService";
 
 interface SectionListProps {
   sections: SectionOutput[];
@@ -20,6 +19,7 @@ interface SectionListProps {
 export function SectionList({ sections, onMutateSections }: SectionListProps) {
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedSection, setSelectedSection] = useState<SectionOutput>();
+  const { remove } = useSectionService();
 
   const headings: Heading[] = [
     {
@@ -32,20 +32,14 @@ export function SectionList({ sections, onMutateSections }: SectionListProps) {
     { label: "" },
   ];
 
-  const { setError } = useErrorContext();
-
-  const sectionDelete = trpc.useMutation(["sections.delete"], {
-    onError: (error) => setError(error.message),
-    onSuccess: () => onMutateSections(),
-  });
-
   function editSection(section: SectionOutput) {
     setSelectedSection(section);
     setOpenEdit(true);
   }
   async function removeSection(section: SectionOutput) {
     if (!section) return;
-    await sectionDelete.mutateAsync(section.id);
+    await remove(section.id);
+    onMutateSections();
   }
 
   return (

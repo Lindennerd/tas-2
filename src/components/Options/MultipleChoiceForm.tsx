@@ -1,6 +1,5 @@
-import { useErrorContext } from "@/context/error.context";
-import { Question } from "@/schemas/question.schema";
-import { trpc } from "@/utils/trpc";
+import { useMultipleChoiceService } from "@/hooks/useMultipleChoiceService";
+import { QuestionOutput } from "@/schemas/question.schema";
 import { Button, Input } from "@material-tailwind/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,7 @@ import { BiAddToQueue } from "react-icons/bi";
 import { VscLoading } from "react-icons/vsc";
 
 interface MultipleChoiceFormProps {
-  question?: Question;
+  question?: QuestionOutput;
   onAddOption?: () => void;
 }
 
@@ -28,24 +27,20 @@ export function MultipleChoiceForm({
     defaultValues: question ?? {},
   });
 
-  const { setError } = useErrorContext();
+  const { create } = useMultipleChoiceService();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const createOption = trpc.useMutation(["options.create"], {
-    onError: (error) => setError(error.message),
-    onSuccess: () => setIsLoading(false),
-  });
 
   async function onSubmit(data: MultipleChoiceFormState) {
     if (!question) return;
     setIsLoading(true);
-    await createOption.mutateAsync({
+    await create({
       ...data,
       default: false,
       questionId: question.id,
     });
     onAddOption && onAddOption();
+    setIsLoading(false);
   }
 
   return (

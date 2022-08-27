@@ -31,3 +31,5 @@ export enum QuestionType {
 }
 
 export type QuestionOutput = inferQueryOutput<"questions.findOne">;
+export type QuestionInput = z.TypeOf<typeof questionInputSchema>;
+export type QuestionUpdate = z.TypeOf<typeof questionUpdateSchema>;

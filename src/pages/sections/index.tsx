@@ -3,6 +3,7 @@ import { Filter, FilterForm, Paper } from "@/components/UI";
 import Loading from "@/components/UI/Loading";
 import Pagination from "@/components/UI/Pagination";
 import { useErrorContext } from "@/context/error.context";
+import useSectionService from "@/hooks/useSectionService";
 import { trpc } from "@/utils/trpc";
 import { Button } from "@material-tailwind/react";
 import { useRouter } from "next/router";
@@ -12,18 +13,11 @@ import { BiAddToQueue } from "react-icons/bi";
 export default function SectionsPage() {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
-  const { setError } = useErrorContext();
+  const { findMany } = useSectionService();
 
   const router = useRouter();
 
-  const {
-    data: sections,
-    isLoading,
-    error,
-    refetch,
-  } = trpc.useQuery(["sections.findMany", { filter, page }], {
-    onError: (error) => setError(error.message),
-  });
+  const { data: sections, isLoading, error, refetch } = findMany(filter, page);
 
   function onFilter(filter: FilterForm) {
     setFilter(filter.filter);

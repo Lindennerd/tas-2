@@ -1,7 +1,6 @@
-import { useErrorContext } from "@/context/error.context";
+import { useExtensionsService } from "@/hooks/useExtensionsService";
 import { ExtensionOutput } from "@/schemas/extension.schema";
-import { trpc } from "@/utils/trpc";
-import { Button, Select, Option } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 
 export type FileExtensions = {
@@ -21,10 +20,10 @@ interface FileExtensionsProps {
 
 export function FileFormChoiceForm({
   questionId,
-  onSaveExtensions,
   extension,
 }: FileExtensionsProps) {
   const { register, handleSubmit } = useForm<FileExtensionsState>();
+  const { create, update } = useExtensionsService();
 
   const extensions: FileExtensions[] = [
     {
@@ -41,27 +40,15 @@ export function FileFormChoiceForm({
     },
   ];
 
-  const { setError } = useErrorContext();
-
-  const extensionsCreate = trpc.useMutation("extensions.create", {
-    onError: (error) => setError(error.message),
-    onSuccess: () => {},
-  });
-
-  const extensionsUpdate = trpc.useMutation("extensions.update", {
-    onError: (error) => setError(error.message),
-    onSuccess: () => {},
-  });
-
   async function onSubmit(data: FileExtensionsState) {
     if (extension) {
-      await extensionsUpdate.mutateAsync({
+      await update({
         ...data,
         questionId: questionId,
         id: extension.id,
       });
     } else {
-      await extensionsCreate.mutateAsync({ ...data, questionId: questionId });
+      await create({ ...data, questionId: questionId });
     }
   }
 

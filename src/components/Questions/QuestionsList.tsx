@@ -11,21 +11,16 @@ import { BiTrash } from "react-icons/bi";
 import { toast, ToastContainer } from "react-toastify";
 import { QuestionTypeButton } from "./QuestionTypeButton";
 import { QuestionEditButton } from "./QuestionEditButton";
+import { useQuestionService } from "@/hooks/useQuestionService";
 
 interface QuestionsListProps {
   sectionId: string;
 }
 
 export function QuestionsList({ sectionId }: QuestionsListProps) {
-  const { setError } = useErrorContext();
+  const { findManyBySection, delete: remove } = useQuestionService();
 
-  const {
-    data: questions,
-    isLoading,
-    refetch,
-  } = trpc.useQuery(["questions.findManyBySection", { section: sectionId }], {
-    onError: (error) => setError(error.message),
-  });
+  const { data: questions, isLoading, refetch } = findManyBySection(sectionId);
 
   const headings: Heading[] = [
     { label: "Peso", size: 16 },
@@ -43,17 +38,9 @@ export function QuestionsList({ sectionId }: QuestionsListProps) {
     },
   ];
 
-  const deleteQuestion = trpc.useMutation(["questions.delete"], {
-    onSuccess: () => {
-      refetch();
-      toast.warn("Questão deletada");
-    },
-    onError: (error) => setError(error.message),
-  });
-
   async function removeQuestion(question: QuestionOutput) {
     if (!question) return;
-    await deleteQuestion.mutateAsync(question.id);
+    await remove(question.id);
   }
 
   return (

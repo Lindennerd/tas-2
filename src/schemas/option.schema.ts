@@ -14,3 +14,4 @@ export const optionEditSchema = optionInputSchema.extend({
 });
 
 export type Option = z.infer<typeof optionEditSchema>;
+export type OptionInput = z.infer<typeof optionInputSchema>;

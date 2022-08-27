@@ -1,12 +1,11 @@
-import { useErrorContext } from "@/context/error.context";
+import useSectionService from "@/hooks/useSectionService";
 import { SectionOutput, SectionInput } from "@/schemas/section.schema";
-import { trpc } from "@/utils/trpc";
-import { Button, Input, Switch, Textarea } from "@material-tailwind/react";
+import { Button, Input, Textarea } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 
 interface ISectionFormProps {
-  onMutatedSection?: (section: SectionOutput) => void;
+  onMutatedSection?: (mutated: SectionOutput) => void;
   section?: SectionOutput;
 }
 
@@ -22,30 +21,19 @@ export default function SectionForm({
     defaultValues: { ...section, description: section?.description ?? "" },
   });
 
-  const sectionCreate = trpc.useMutation(["sections.create"], {
-    onError: (error) => setError(error.message),
-    onSuccess: (data) => {
-      toast.success("Seção criada com sucesso!");
-      if (mutatedSection) mutatedSection(data);
-    },
-  });
-  const sectionEdit = trpc.useMutation(["sections.update"], {
-    onError: (error) => setError(error.message),
-    onSuccess: (data) => {
-      toast.success("Seção editada com sucesso!");
-      if (mutatedSection) mutatedSection(data);
-    },
-  });
+  const { create, edit } = useSectionService();
 
   async function submit(sectionInput: SectionInput) {
     if (section) {
-      await sectionEdit.mutateAsync({ id: section.id, ...sectionInput });
+      const mutated = await edit({ id: section.id, ...sectionInput });
+      toast.success("Seção editada com sucesso!");
+      if (mutatedSection) mutatedSection(mutated);
     } else {
-      await sectionCreate.mutateAsync(sectionInput);
+      const mutated = await create(sectionInput);
+      toast.success("Seção criada com sucesso!");
+      if (mutatedSection) mutatedSection(mutated);
     }
   }
-
-  const { setError } = useErrorContext();
 
   return (
     <form onSubmit={handleSubmit(submit)} action="" className="space-y-2">

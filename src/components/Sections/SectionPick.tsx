@@ -1,8 +1,8 @@
-import { trpc } from "@/utils/trpc";
+import useSectionService from "@/hooks/useSectionService";
+import { SectionOutput } from "@/schemas/section.schema";
 import { Button } from "@material-tailwind/react";
 import { useState } from "react";
 import Select from "react-select";
-import { string } from "zod";
 
 interface SectionPickProps {
   onPick: (id: string) => void;
@@ -14,21 +14,17 @@ type Option = {
 };
 
 export function SectionPick(props: SectionPickProps) {
+  const { findAllOptionals } = useSectionService();
+  const [options, setOptions] = useState<Option[]>([]);
   const [selectedSection, setSelectedSection] = useState<string | undefined>(
     ""
   );
 
-  const [options, setOptions] = useState<Option[]>([]);
-
-  const {
-    data: sections,
-    isLoading,
-    refetch,
-  } = trpc.useQuery(["sections.findAllOptionals"], {
-    onSuccess: (sections) => {
+  findAllOptionals({
+    onSuccess: (sections: SectionOutput[]) => {
       setOptions(
         sections?.map((section) => {
-          return { value: section.id, label: section.name };
+          return { value: section!.id, label: section!.name };
         })
       );
     },
