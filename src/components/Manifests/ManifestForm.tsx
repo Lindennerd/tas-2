@@ -7,6 +7,7 @@ import { Paper } from "../UI";
 import { Section } from "@/schemas/section.schema";
 import useSectionService from "@/hooks/useSectionService";
 import { ManifestSection } from "./ManifestSection";
+import { Button } from "@material-tailwind/react";
 
 interface ManifestFormProps {
   manifest: ManifestOutput;
@@ -44,7 +45,17 @@ export function ManifestForm(props: ManifestFormProps) {
 
       <div className="flex flex-wrap gap-2 w-full">
         <Paper>
-          <div>Sections</div>
+          <div className="flex flex-col">
+            {sections &&
+              sections.map((section, index) => (
+                <a
+                  key={section?.id}
+                  className="hover:border-b hover:font-semibold cursor-pointer text-primary"
+                >
+                  {index + 1}. {section?.name}
+                </a>
+              ))}
+          </div>
         </Paper>
         <div className="flex-1">
           {sections &&
