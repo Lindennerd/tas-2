@@ -8,9 +8,15 @@ interface QuestionValueInput {
   value: string;
 }
 
+interface FileInput {
+  questionId: string;
+  fileBase64: string;
+}
+
 const UnsavedChangesContext = createContext<{
   hasUnsavedChanges: boolean;
   setManifest: (manifestId: string) => void;
+  mutateFile: ({ questionId, fileBase64 }: FileInput) => void;
   mutateAnswer: ({ questionId, value, id }: QuestionValueInput) => void;
   mutateComment: ({ questionId, value, id }: QuestionValueInput) => void;
 } | null>(null);
@@ -31,6 +37,8 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
 
   function mutateComment(comment: QuestionValueInput) {}
 
+  function mutateFile({ fileBase64, questionId }: FileInput) {}
+
   function setManifest(manifestId: string) {
     setManifestId(manifestId);
   }
@@ -41,6 +49,7 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
         hasUnsavedChanges: unsavedChanges,
         mutateAnswer,
         mutateComment,
+        mutateFile,
         setManifest,
       }}
     >

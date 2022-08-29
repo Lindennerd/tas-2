@@ -8,13 +8,16 @@ interface Props {
 export function ManifestQuestionFile(props: Props) {
   const changesContext = useUnsavedChangesContext();
 
-  function getBase64(file: File | undefined | null) {
+  function SaveFile(file: File | undefined) {
     if (!file) return;
 
     var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
-      return reader.result;
+      changesContext.mutateFile({
+        questionId: props.question!.id,
+        fileBase64: reader.result?.toString() ?? "",
+      });
     };
     reader.onerror = function (error) {
       console.log("Error: ", error);
@@ -50,10 +53,14 @@ export function ManifestQuestionFile(props: Props) {
         type="file"
         id="formFile"
         onChange={(e) => {
-          changesContext.mutateAnswer({
-            questionId: props.question!.id,
-            value: getBase64(e.target.files && e.target.files[0]),
-          });
+          if (e.target.files && e.target.files?.length > 0) {
+            changesContext.mutateAnswer({
+              questionId: props.question!.id,
+              value: e.target.files[0]?.name || "",
+            });
+
+            SaveFile(e.target.files[0]);
+          }
         }}
       />
     </div>
