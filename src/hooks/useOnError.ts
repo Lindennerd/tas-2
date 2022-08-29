@@ -7,8 +7,7 @@ export default function useOnError() {
 
   return {
     onError: function (error: TRPCClientError<any>) {
-      console.log("deu erro parsa");
-      setError(JSON.parse(error.message)[0].message);
+      setError(error.message);
     },
   };
 }

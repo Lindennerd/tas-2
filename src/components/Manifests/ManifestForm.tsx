@@ -7,7 +7,10 @@ import { Paper } from "../UI";
 import { Section } from "@/schemas/section.schema";
 import useSectionService from "@/hooks/useSectionService";
 import { ManifestSection } from "./ManifestSection";
-import { Button } from "@material-tailwind/react";
+import { Alert, Button } from "@material-tailwind/react";
+import { useManifestService } from "@/hooks/useManifestService";
+import { BiSave } from "react-icons/bi";
+import { useUnsavedChangesContext } from "@/context/manifest.changes.context";
 
 interface ManifestFormProps {
   manifest: ManifestOutput;
@@ -16,16 +19,23 @@ interface ManifestFormProps {
 export function ManifestForm(props: ManifestFormProps) {
   const formatDate = useFormatDate();
   const { findFirst } = useSectionService();
+  const { addSection } = useManifestService();
+  const changesContext = useUnsavedChangesContext();
+
   const [sections, setSections] = useState<Section[]>();
   const [sectionPicked, setSectionPicked] = useState("");
 
   findFirst(sectionPicked, {
     enabled: sectionPicked !== "",
-    onSuccess: (section: Section) => setSections((curr) => [...curr!, section]),
+    onSuccess: (section: Section) => {
+      setSections((curr) => [...curr!, section]);
+      addSection(section!.id, props.manifest!.id);
+    },
   });
 
   useEffect(() => {
     setSections(props.manifest?.sections);
+    changesContext.setManifest(props.manifest!.id);
   }, [props.manifest]);
 
   return (
@@ -38,11 +48,23 @@ export function ManifestForm(props: ManifestFormProps) {
           Cadastrado em {formatDate(props.manifest?.asset.createdAt)}
         </p>
       </Paper>
-
+      <Paper className="flex justify-between items-center">
+        <Button
+          size="sm"
+          variant="outlined"
+          color="green"
+          className="flex items-center gap-2"
+        >
+          <BiSave className="text-lg" />
+          Salvar
+        </Button>
+        {changesContext.hasUnsavedChanges && (
+          <Alert>Existem alterações não salvas</Alert>
+        )}
+      </Paper>
       <Paper>
         <SectionPick onPick={(sectionId) => setSectionPicked(sectionId)} />
       </Paper>
-
       <div className="flex flex-wrap gap-2 w-full">
         <Paper>
           <div className="flex flex-col">

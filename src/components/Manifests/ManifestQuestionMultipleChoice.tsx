@@ -1,3 +1,4 @@
+import { useUnsavedChangesContext } from "@/context/manifest.changes.context";
 import { QuestionOutput } from "@/schemas/question.schema";
 import { Radio } from "@material-tailwind/react";
 
@@ -6,6 +7,8 @@ interface Props {
 }
 
 export function ManifestQuestionMultipleChoice(props: Props) {
+  const changesContext = useUnsavedChangesContext();
+
   return (
     <div>
       {props.question?.Option.map((option) => {
@@ -15,6 +18,12 @@ export function ManifestQuestionMultipleChoice(props: Props) {
               type="radio"
               name={props.question?.id}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
+              onChange={(e) =>
+                changesContext.mutateAnswer({
+                  questionId: props.question!.id,
+                  value: e.target.value,
+                })
+              }
             />
             <label
               htmlFor={props.question?.id}

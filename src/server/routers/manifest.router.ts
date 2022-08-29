@@ -77,4 +77,20 @@ export const manifestRouter = createRouter()
         select: selectManifest,
       });
     },
+  })
+  .mutation("addSection", {
+    input: z.object({
+      sectionId: z.string(),
+      manifestId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.manifest.update({
+        where: { id: input.manifestId },
+        data: {
+          sections: {
+            connect: { id: input.sectionId },
+          },
+        },
+      });
+    },
   });

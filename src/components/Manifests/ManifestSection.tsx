@@ -1,5 +1,4 @@
 import { Section } from "@/schemas/section.schema";
-import { Paper } from "../UI";
 import { ManifestQuestion } from "./ManifestQuestion";
 
 interface ManifestSectionProps {
@@ -15,7 +14,7 @@ export function ManifestSection(props: ManifestSectionProps) {
       </div>
       <div className="w-full">
         {props.section?.questions?.map((question) => (
-          <div className="border-b">
+          <div className="border-b" key={question.id}>
             <ManifestQuestion question={question} key={question.id} />
           </div>
         ))}

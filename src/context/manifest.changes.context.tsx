@@ -1,8 +1,18 @@
+import { Answer, AnswerInput, AnswerUpdate } from "@/schemas/answer.schema";
+import { Comment, CommentInput, CommentUpdate } from "@/schemas/comment.schema";
 import { createContext, ReactNode, useContext, useState } from "react";
 
+interface QuestionValueInput {
+  id?: string;
+  questionId: string;
+  value: string;
+}
+
 const UnsavedChangesContext = createContext<{
-  state: boolean;
-  setState: (state: boolean) => void;
+  hasUnsavedChanges: boolean;
+  setManifest: (manifestId: string) => void;
+  mutateAnswer: ({ questionId, value, id }: QuestionValueInput) => void;
+  mutateComment: ({ questionId, value, id }: QuestionValueInput) => void;
 } | null>(null);
 
 export function useUnsavedChangesContext() {
@@ -13,10 +23,26 @@ export function useUnsavedChangesContext() {
 
 export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<Answer[]>();
+  const [comments, setComments] = useState<Comment[]>();
+  const [manifestId, setManifestId] = useState("");
+
+  function mutateAnswer(answer: QuestionValueInput) {}
+
+  function mutateComment(comment: QuestionValueInput) {}
+
+  function setManifest(manifestId: string) {
+    setManifestId(manifestId);
+  }
 
   return (
     <UnsavedChangesContext.Provider
-      value={{ state: unsavedChanges, setState: setUnsavedChanges }}
+      value={{
+        hasUnsavedChanges: unsavedChanges,
+        mutateAnswer,
+        mutateComment,
+        setManifest,
+      }}
     >
       {children}
     </UnsavedChangesContext.Provider>
