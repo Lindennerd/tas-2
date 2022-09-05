@@ -39,7 +39,7 @@ export function ManifestForm(props: ManifestFormProps) {
   }, [props.manifest]);
 
   return (
-    <div className="px-4 space-y-2">
+    <div className="space-y-2 px-2">
       <Paper>
         <h1 className="uppercase text-center font-semibold">
           Manifesto do Ativo {props.manifest?.asset.name}
@@ -48,12 +48,13 @@ export function ManifestForm(props: ManifestFormProps) {
           Cadastrado em {formatDate(props.manifest?.asset.createdAt)}
         </p>
       </Paper>
-      <Paper className="flex justify-start gap-2 items-center">
+      <Paper className="flex justify-start gap-2 items-center sticky top-16 bg-white z-10 ">
         <Button
           size="sm"
           variant="outlined"
-          color="green"
+          color="blue"
           className="flex items-center gap-2"
+          disabled={!changesContext.hasUnsavedChanges}
           onClick={(e) => {
             console.log("click");
             changesContext.saveChanges();
@@ -62,19 +63,11 @@ export function ManifestForm(props: ManifestFormProps) {
           <BiSave className="text-lg" />
           Salvar
         </Button>
-        {changesContext.hasUnsavedChanges && (
-          <span className="text-primary flex items-center gap-2">
-            <BiInfoSquare className="text-xl" />
-            Existem alterações não salvas
-          </span>
-        )}
-      </Paper>
-      <Paper>
         <SectionPick onPick={(sectionId) => setSectionPicked(sectionId)} />
       </Paper>
       <div className="flex flex-wrap gap-2 w-full">
         <Paper>
-          <div className="flex flex-col">
+          <div className="flex flex-col sticky top-40">
             {sections &&
               sections.map((section, index) => (
                 <a
