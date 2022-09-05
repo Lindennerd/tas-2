@@ -28,7 +28,7 @@ export function ManifestForm(props: ManifestFormProps) {
   findFirst(sectionPicked, {
     enabled: sectionPicked !== "",
     onSuccess: (section: Section) => {
-      setSections((curr) => [...curr!, section]);
+      setSections((curr) => [...(curr ?? []), section]);
       addSection(section!.id, props.manifest!.id);
     },
   });

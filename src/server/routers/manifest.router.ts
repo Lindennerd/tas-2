@@ -59,14 +59,22 @@ export const manifestRouter = createRouter()
   })
   .query("findByAsset", {
     input: z.object({
-      assetId: z.string().nullable(),
+      assetId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      if (!input.assetId) return undefined;
-      return await ctx.prisma.manifest.findFirst({
+      let manifest = await ctx.prisma.manifest.findFirst({
         where: { assetId: input.assetId },
         select: selectManifest,
       });
+
+      if (!manifest) {
+        manifest = await ctx.prisma.manifest.create({
+          data: { assetId: input.assetId, userId: ctx.session.user.id },
+          select: selectManifest,
+        });
+      }
+
+      return manifest;
     },
   })
   .query("findFirst", {
