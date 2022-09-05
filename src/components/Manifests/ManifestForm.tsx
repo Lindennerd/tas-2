@@ -9,7 +9,7 @@ import useSectionService from "@/hooks/useSectionService";
 import { ManifestSection } from "./ManifestSection";
 import { Alert, Button } from "@material-tailwind/react";
 import { useManifestService } from "@/hooks/useManifestService";
-import { BiSave } from "react-icons/bi";
+import { BiInfoSquare, BiSave } from "react-icons/bi";
 import { useUnsavedChangesContext } from "@/context/manifest.changes.context";
 
 interface ManifestFormProps {
@@ -35,7 +35,7 @@ export function ManifestForm(props: ManifestFormProps) {
 
   useEffect(() => {
     setSections(props.manifest?.sections);
-    changesContext.setManifest(props.manifest!.id);
+    if (props.manifest) changesContext.setManifest(props.manifest!.id);
   }, [props.manifest]);
 
   return (
@@ -48,18 +48,25 @@ export function ManifestForm(props: ManifestFormProps) {
           Cadastrado em {formatDate(props.manifest?.asset.createdAt)}
         </p>
       </Paper>
-      <Paper className="flex justify-between items-center">
+      <Paper className="flex justify-start gap-2 items-center">
         <Button
           size="sm"
           variant="outlined"
           color="green"
           className="flex items-center gap-2"
+          onClick={(e) => {
+            console.log("click");
+            changesContext.saveChanges();
+          }}
         >
           <BiSave className="text-lg" />
           Salvar
         </Button>
         {changesContext.hasUnsavedChanges && (
-          <Alert>Existem alterações não salvas</Alert>
+          <span className="text-primary flex items-center gap-2">
+            <BiInfoSquare className="text-xl" />
+            Existem alterações não salvas
+          </span>
         )}
       </Paper>
       <Paper>

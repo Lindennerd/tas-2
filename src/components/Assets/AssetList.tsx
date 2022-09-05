@@ -1,6 +1,7 @@
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { AssetOutput } from "@/schemas/asset.schema";
 import { Button, Tooltip } from "@material-tailwind/react";
+import { useRouter } from "next/router";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { Heading, Table, TableCell, TableRow } from "../UI/Table";
 
@@ -10,6 +11,7 @@ interface AssetListProps {
 
 export function AssetList(props: AssetListProps) {
   const formatDate = useFormatDate();
+  const router = useRouter();
 
   const headings: Heading[] = [
     { label: "Nome" },
@@ -30,7 +32,10 @@ export function AssetList(props: AssetListProps) {
               <TableCell>{formatDate(asset?.createdAt)}</TableCell>
               <TableCell>
                 <div className="flex gap-2 items-center justify-center">
-                  <Button className="p-1 rounded-full">
+                  <Button
+                    className="p-1 rounded-full"
+                    onClick={(e) => router.push(`assets/${asset?.id}`)}
+                  >
                     <BiEdit className="text-lg" />
                   </Button>
                   <Button className="p-1 rounded-full" color="red">

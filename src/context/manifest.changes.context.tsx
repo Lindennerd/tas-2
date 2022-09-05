@@ -9,6 +9,7 @@ interface QuestionValueInput {
 }
 
 interface FileInput {
+  id?: string;
   questionId: string;
   fileBase64: string;
 }
@@ -19,6 +20,7 @@ const UnsavedChangesContext = createContext<{
   mutateFile: ({ questionId, fileBase64 }: FileInput) => void;
   mutateAnswer: ({ questionId, value, id }: QuestionValueInput) => void;
   mutateComment: ({ questionId, value, id }: QuestionValueInput) => void;
+  saveChanges: () => void;
 } | null>(null);
 
 export function useUnsavedChangesContext() {
@@ -29,18 +31,55 @@ export function useUnsavedChangesContext() {
 
 export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
-  const [answers, setAnswers] = useState<Answer[]>();
+  const [answers, setAnswers] = useState<QuestionValueInput[]>();
   const [comments, setComments] = useState<Comment[]>();
   const [manifestId, setManifestId] = useState("");
 
-  function mutateAnswer(answer: QuestionValueInput) {}
+  function mutateAnswer(answer: QuestionValueInput) {
+    setUnsavedChanges(true);
+    setAnswers((curr) => {
+      const draft = curr?.filter(
+        (a) => a && a.questionId !== answer.questionId
+      );
+      return [
+        ...(draft ?? []),
+        {
+          manifestId: manifestId,
+          questionId: answer.questionId,
+          id: answer.id ?? "",
+          value: answer.value,
+        },
+      ];
+    });
+  }
 
-  function mutateComment(comment: QuestionValueInput) {}
+  function mutateComment(comment: QuestionValueInput) {
+    setUnsavedChanges(true);
+  }
 
-  function mutateFile({ fileBase64, questionId }: FileInput) {}
+  function mutateFile({ fileBase64, questionId, id }: FileInput) {
+    setUnsavedChanges(true);
+    setAnswers((curr) => {
+      const draft = curr?.filter((a) => a && a.questionId !== questionId);
+      return [
+        ...(draft ?? []),
+        {
+          manifestId: manifestId,
+          questionId: questionId,
+          id: id ?? "",
+          value: fileBase64,
+        },
+      ];
+    });
+  }
 
   function setManifest(manifestId: string) {
     setManifestId(manifestId);
+  }
+
+  function saveChanges() {
+    console.log("saving");
+    setUnsavedChanges(false);
   }
 
   return (
@@ -51,6 +90,7 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
         mutateComment,
         mutateFile,
         setManifest,
+        saveChanges,
       }}
     >
       {children}

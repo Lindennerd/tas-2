@@ -4,9 +4,10 @@ import { AssetOutput, AssetEdit, AssetInput } from "../../schemas/asset.schema";
 import { ToastContainer, toast } from "react-toastify";
 import { trpc } from "@/utils/trpc";
 import { useErrorContext } from "@/context/error.context";
+import { useEffect } from "react";
 
 interface IAssetFormProps {
-  asset?: AssetEdit;
+  asset?: AssetEdit | null;
   setAsset?: (asset: AssetOutput) => void;
 }
 
@@ -15,9 +16,8 @@ export function AssetForm({ asset, setAsset }: IAssetFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AssetInput>({
-    defaultValues: { ...asset, url: asset?.url ?? "" },
-  });
+    setValue,
+  } = useForm<AssetInput>();
 
   const { setError } = useErrorContext();
 
@@ -45,6 +45,14 @@ export function AssetForm({ asset, setAsset }: IAssetFormProps) {
 
     toast.success("Ativo salvo com sucesso!");
   }
+
+  useEffect(() => {
+    if (asset) {
+      setValue("name", asset.name);
+      setValue("description", asset?.description);
+      setValue("url", asset.url);
+    }
+  }, [asset]);
 
   return (
     <>
