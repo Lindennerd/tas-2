@@ -6,7 +6,6 @@ import { ManifestQuestionMultipleChoice } from "./ManifestQuestionMultipleChoice
 import { ManifestQuestionText } from "./ManifestQuestionText";
 import { CommentForm } from "../Comments/CommentForm";
 import { ManifestQuestionFile } from "./ManifestQuestionFile";
-import { useUnsavedChangesContext } from "@/context/manifest.changes.context";
 
 interface ManifestQuestionProps {
   question: QuestionOutput;

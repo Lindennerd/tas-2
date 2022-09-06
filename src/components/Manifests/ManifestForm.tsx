@@ -56,7 +56,6 @@ export function ManifestForm(props: ManifestFormProps) {
           className="flex items-center gap-2"
           disabled={!changesContext.hasUnsavedChanges}
           onClick={(e) => {
-            console.log("click");
             changesContext.saveChanges();
           }}
         >

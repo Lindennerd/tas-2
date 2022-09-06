@@ -1,13 +1,13 @@
 import { inferQueryOutput } from "@/utils/trpc";
 import { z } from "zod";
 
-const answerInputSchema = z.object({
+export const answerInputSchema = z.object({
   value: z.string(),
   questionId: z.string(),
   manifestId: z.string(),
 });
 
-const answerUpdateSchema = answerInputSchema.extend({
+export const answerUpdateSchema = answerInputSchema.extend({
   id: z.string(),
 });
 

@@ -1,3 +1,4 @@
+import { Answer } from "@/schemas/answer.schema";
 import { z } from "zod";
 import { createRouter } from "../context/context";
 import * as trpc from "@trpc/server";
@@ -25,6 +26,27 @@ const selectManifest = {
           type: true,
           weight: true,
           sectionId: true,
+          Answer: {
+            select: {
+              id: true,
+              questionId: true,
+              value: true,
+              Comment: {
+                select: {
+                  value: true,
+                  id: true,
+                  approved: true,
+                  createdAt: true,
+                  user: {
+                    select: {
+                      email: true,
+                      id: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
           Option: {
             select: {
               description: true,

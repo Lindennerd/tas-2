@@ -1,11 +1,14 @@
 import { Answer, AnswerInput, AnswerUpdate } from "@/schemas/answer.schema";
 import { Comment, CommentInput, CommentUpdate } from "@/schemas/comment.schema";
+import { trpc } from "@/utils/trpc";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useErrorContext } from "./error.context";
 
 interface QuestionValueInput {
   id?: string;
   questionId: string;
   value: string;
+  manifestId: string;
 }
 
 interface FileInput {
@@ -16,6 +19,7 @@ interface FileInput {
 
 const UnsavedChangesContext = createContext<{
   hasUnsavedChanges: boolean;
+  manifestId: string;
   setManifest: (manifestId: string) => void;
   mutateFile: ({ questionId, fileBase64 }: FileInput) => void;
   mutateAnswer: ({ questionId, value, id }: QuestionValueInput) => void;
@@ -34,6 +38,12 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
   const [answers, setAnswers] = useState<QuestionValueInput[]>();
   const [comments, setComments] = useState<Comment[]>();
   const [manifestId, setManifestId] = useState("");
+
+  const { setError } = useErrorContext();
+
+  const answersMutation = trpc.useMutation(["answers.createMany"], {
+    onError: (error) => setError(error.message),
+  });
 
   function mutateAnswer(answer: QuestionValueInput) {
     setUnsavedChanges(true);
@@ -78,14 +88,15 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
   }
 
   function saveChanges() {
-    console.log("saving");
     setUnsavedChanges(false);
+    if (answers) answersMutation.mutate(answers);
   }
 
   return (
     <UnsavedChangesContext.Provider
       value={{
         hasUnsavedChanges: unsavedChanges,
+        manifestId,
         mutateAnswer,
         mutateComment,
         mutateFile,
