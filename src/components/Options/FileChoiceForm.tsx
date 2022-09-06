@@ -61,7 +61,7 @@ export function FileFormChoiceForm({
           aria-label="Tipo de Questão"
         >
           {extensions.map((ext) => (
-            <option value={ext.extensions}>{ext.description}</option>
+            <option value={ext.extensions} key={ext.id}>{ext.description}</option>
           ))}
         </select>
         <Button type="submit" color="green">
