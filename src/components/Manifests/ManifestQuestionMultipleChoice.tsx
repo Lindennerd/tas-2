@@ -20,6 +20,7 @@ export function ManifestQuestionMultipleChoice(props: Props) {
     props.question?.Answer && props.question.Answer.length
       ? props.question.Answer[0]?.id
       : "";
+
   return (
     <div>
       {props.question?.Option.map((option) => {
@@ -27,11 +28,11 @@ export function ManifestQuestionMultipleChoice(props: Props) {
           <div className="flex items-center mb-4" key={option.id}>
             <input
               type="radio"
-              checked={option.description === answerValue}
-              name={props.question?.id}
+              defaultChecked={option.description === answerValue}
               value={option.description}
+              name={props.question?.id}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-              onBlur={(e) =>
+              onChange={(e) =>
                 changesContext.mutateAnswer({
                   id: answerId,
                   questionId: props.question!.id,
