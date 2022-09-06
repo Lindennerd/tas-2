@@ -127,6 +127,7 @@ model Question {
   Answer      Answer[]
   Option      Option[]
   Extensions  Extensions[]
+  Comment     Comment[]
 }
 
 model Section {
@@ -138,7 +139,7 @@ model Section {
   manifestId  String?
   Document    Document?  @relation(fields: [documentId], references: [id])
   documentId  String?
-  required Boolean @default(false)
+  required    Boolean    @default(false)
 }
 
 model Manifest {
@@ -152,6 +153,7 @@ model Manifest {
   ManifestUpdate ManifestUpdate[]
   Attachment     Attachment[]
   Answer         Answer[]
+  Comment        Comment[]
 }
 
 model ManifestUpdate {
@@ -176,27 +178,28 @@ model Attachment {
 }
 
 model Answer {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   value      String
-  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
-  manifest   Manifest  @relation(fields: [manifestId], references: [id], onDelete: Cascade)
+  manifest   Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
   manifestId String
-  createdAt  DateTime  @default(now())
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  Comment    Comment[]
 }
 
 model Comment {
-  id        String   @id @default(cuid())
-  value     String
-  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId  String
-  approved  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  id         String   @id @default(cuid())
+  value      String
+  question   Question @relation(fields: [questionId], references: [id])
+  manifest   Manifest @relation(fields: [manifestId], references: [id])
+  approved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  questionId String
+  manifestId String
 }
 
 model Document {

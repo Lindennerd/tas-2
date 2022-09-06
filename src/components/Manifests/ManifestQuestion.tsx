@@ -64,7 +64,10 @@ export function ManifestQuestion(props: ManifestQuestionProps) {
 
       <Dialog open={openAddComment} handler={setOpenAddComment}>
         <DialogBody>
-          <CommentForm />
+          <CommentForm
+            question={props.question}
+            onSave={() => setOpenAddComment}
+          />
         </DialogBody>
       </Dialog>
     </>
