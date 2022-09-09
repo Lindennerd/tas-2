@@ -5,6 +5,7 @@ import * as trpc from "@trpc/server";
 
 const selectManifest = {
   id: true,
+  Comment: true,
   asset: {
     select: {
       id: true,
@@ -20,13 +21,12 @@ const selectManifest = {
       required: true,
       questions: {
         select: {
-          description: true,
           id: true,
-          help: true,
+          description: true,
           type: true,
           weight: true,
+          help: true,
           sectionId: true,
-
           Answer: {
             select: {
               id: true,
@@ -36,16 +36,18 @@ const selectManifest = {
           },
           Option: {
             select: {
-              description: true,
-              default: true,
               id: true,
+              default: true,
+              description: true,
+              questionId: true,
             },
           },
           Extensions: {
             select: {
+              id: true,
               default: true,
               description: true,
-              id: true,
+              questionId: true,
             },
           },
         },

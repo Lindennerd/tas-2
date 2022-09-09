@@ -71,7 +71,7 @@ export function ManifestForm(props: ManifestFormProps) {
               sections.map((section, index) => (
                 <a
                   key={section?.id}
-                  className="hover:border-b hover:font-semibold cursor-pointer text-primary"
+                  className="hover:border-b cursor-pointer text-primary"
                 >
                   {index + 1}. {section?.name}
                 </a>
@@ -81,7 +81,11 @@ export function ManifestForm(props: ManifestFormProps) {
         <div className="flex-1">
           {sections &&
             sections.map((section) => (
-              <ManifestSection section={section} key={section?.id} />
+              <ManifestSection
+                key={section?.id}
+                section={section}
+                comments={props.manifest?.Comment}
+              />
             ))}
         </div>
       </div>

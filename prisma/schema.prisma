@@ -1,43 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// generator trpc {
-//   provider       = "prisma-trpc-generator"
-//   withMiddleware = true
-//   withShield     = false
-//   contextPath    = "../src/server/router/context.ts"
-// }
-
-// generator erd {
-//   provider = "prisma-erd-generator"
-// }
-
 datasource db {
   provider = "sqlite"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.text annotations in model Account below
-  // Further reading: 
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? //@db.Text
-  access_token      String? //@db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? //@db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -59,16 +40,16 @@ model User {
   emailVerified  DateTime?
   image          String?
   accounts       Account[]
-  sessions       Session[]
+  Answer         Answer[]
   Asset          Asset[]
   AssetUpdate    AssetUpdate[]
-  Manifest       Manifest[]
-  ManifestUpdate ManifestUpdate[]
   Attachment     Attachment[]
-  Answer         Answer[]
   Comment        Comment[]
   Document       Document[]
   DocumentUpdate DocumentUpdate[]
+  Manifest       Manifest[]
+  ManifestUpdate ManifestUpdate[]
+  sessions       Session[]
 }
 
 model VerificationToken {
@@ -85,35 +66,35 @@ model Asset {
   description String
   url         String?
   userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   AssetUpdate AssetUpdate[]
   Manifest    Manifest[]
 }
 
 model AssetUpdate {
   id        String   @id @default(cuid())
-  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
   assetId   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   updatedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
 }
 
 model Option {
   id          String   @id @default(cuid())
   description String
   default     Boolean  @default(false)
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Extensions {
   id          String   @id @default(cuid())
   description String
   default     Boolean  @default(false)
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Question {
@@ -122,11 +103,11 @@ model Question {
   help        String?
   type        String
   weight      Int
-  Section     Section?     @relation(fields: [sectionId], references: [id])
   sectionId   String?
+  Section     Section?     @relation(fields: [sectionId], references: [id])
   Answer      Answer[]
-  Option      Option[]
   Extensions  Extensions[]
+  Option      Option[]
   Comment     Comment[]
 }
 
@@ -134,35 +115,35 @@ model Section {
   id          String     @id @default(cuid())
   name        String
   description String
-  questions   Question[]
-  Manifest    Manifest?  @relation(fields: [manifestId], references: [id])
   manifestId  String?
-  Document    Document?  @relation(fields: [documentId], references: [id])
   documentId  String?
   required    Boolean    @default(false)
+  Document    Document?  @relation(fields: [documentId], references: [id])
+  Manifest    Manifest?  @relation(fields: [manifestId], references: [id])
+  questions   Question[]
 }
 
 model Manifest {
   id             String           @id @default(cuid())
-  asset          Asset            @relation(fields: [assetId], references: [id], onDelete: Cascade)
   assetId        String
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-  sections       Section[]
   createdAt      DateTime         @default(now())
-  ManifestUpdate ManifestUpdate[]
-  Attachment     Attachment[]
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset          Asset            @relation(fields: [assetId], references: [id], onDelete: Cascade)
   Answer         Answer[]
+  Attachment     Attachment[]
+  ManifestUpdate ManifestUpdate[]
+  sections       Section[]
   Comment        Comment[]
 }
 
 model ManifestUpdate {
   id         String   @id @default(cuid())
-  manifest   Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
   manifestId String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   updatedAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manifest   Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
@@ -172,21 +153,22 @@ model Attachment {
   url         String?
   userId      String
   manifestId  String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  manifest    Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
+  manifest    Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Answer {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   value      String
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
-  manifest   Manifest @relation(fields: [manifestId], references: [id], onDelete: Cascade)
   manifestId String
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
   userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manifest   Manifest  @relation(fields: [manifestId], references: [id], onDelete: Cascade)
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  Comment    Comment[]
 }
 
 model Comment {
@@ -196,8 +178,10 @@ model Comment {
   manifest   Manifest @relation(fields: [manifestId], references: [id])
   approved   Boolean  @default(false)
   createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Answer     Answer?  @relation(fields: [answerId], references: [id])
+  answerId   String?
   questionId String
   manifestId String
 }
@@ -207,17 +191,17 @@ model Document {
   name           String
   description    String
   userId         String
-  creator        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt      DateTime         @default(now())
-  sections       Section[]
+  creator        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   DocumentUpdate DocumentUpdate[]
+  sections       Section[]
 }
 
 model DocumentUpdate {
   id         String   @id @default(cuid())
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   updatedAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 }

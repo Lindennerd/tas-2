@@ -16,21 +16,31 @@ const sectionSelect = {
     select: {
       id: true,
       description: true,
-      help: true,
       type: true,
       weight: true,
+      help: true,
+      sectionId: true,
+      Answer: {
+        select: {
+          id: true,
+          questionId: true,
+          value: true,
+        },
+      },
       Option: {
         select: {
           id: true,
-          description: true,
           default: true,
+          description: true,
+          questionId: true,
         },
       },
       Extensions: {
         select: {
           id: true,
-          description: true,
           default: true,
+          description: true,
+          questionId: true,
         },
       },
     },

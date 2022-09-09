@@ -1,4 +1,3 @@
-import { Answer, AnswerInput, AnswerUpdate } from "@/schemas/answer.schema";
 import { Comment, CommentInput, CommentUpdate } from "@/schemas/comment.schema";
 import { trpc } from "@/utils/trpc";
 import { createContext, ReactNode, useContext, useState } from "react";

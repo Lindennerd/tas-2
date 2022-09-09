@@ -23,7 +23,7 @@ export const answersRouter = createRouter()
     async resolve({ ctx, input }) {
       input.forEach(async (answer) => {
         return await ctx.prisma.answer.upsert({
-          where: { id: answer.id },
+          where: { id: answer.id ?? "" },
           update: {
             questionId: answer.questionId,
             value: answer.value,

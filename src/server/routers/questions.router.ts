@@ -18,20 +18,6 @@ const questionSelect = {
       id: true,
       questionId: true,
       value: true,
-      Comment: {
-        select: {
-          value: true,
-          id: true,
-          approved: true,
-          createdAt: true,
-          user: {
-            select: {
-              email: true,
-              id: true,
-            },
-          },
-        },
-      },
     },
   },
   Option: {

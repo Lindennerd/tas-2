@@ -8,7 +8,7 @@ export const answerInputSchema = z.object({
 });
 
 export const answerUpdateSchema = answerInputSchema.extend({
-  id: z.string(),
+  id: z.string().nullish(),
 });
 
 export type AnswerInput = z.TypeOf<typeof answerInputSchema>;

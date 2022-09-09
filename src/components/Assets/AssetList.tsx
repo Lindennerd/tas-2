@@ -18,8 +18,14 @@ export function AssetList(props: AssetListProps) {
     { label: "Descrição" },
     { label: "URL" },
     { label: "Criado em" },
+    { label: "Manifesto" },
     { label: "" },
   ];
+
+  function gotoManifestPage(assetId: string) {
+    router.push(`manifest/${assetId}`);
+  }
+
   return (
     <div className="p-2">
       <Table headings={headings}>
@@ -30,6 +36,15 @@ export function AssetList(props: AssetListProps) {
               <TableCell>{asset?.description}</TableCell>
               <TableCell>{asset?.url}</TableCell>
               <TableCell>{formatDate(asset?.createdAt)}</TableCell>
+              <TableCell>
+                <Button
+                  variant="outlined"
+                  size="sm"
+                  onClick={(e) => gotoManifestPage(asset!.id)}
+                >
+                  Ver Manifesto
+                </Button>
+              </TableCell>
               <TableCell>
                 <div className="flex gap-2 items-center justify-center">
                   <Button

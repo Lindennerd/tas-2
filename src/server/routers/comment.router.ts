@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { createRouter } from "../context/context";
 export const commentRouter = createRouter()
@@ -16,13 +17,20 @@ export const commentRouter = createRouter()
       manifestId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.comment.create({
-        data: {
-          value: input.comment,
-          userId: ctx.session?.user!.id!,
-          questionId: input.questionId,
-          manifestId: input.manifestId,
-        },
-      });
+      if (!ctx.session || !ctx.session.user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Você não possui permissão para fazer isso",
+        });
+      } else {
+        return await ctx.prisma.comment.create({
+          data: {
+            value: input.comment,
+            userId: ctx.session?.user.id,
+            questionId: input.questionId,
+            manifestId: input.manifestId,
+          },
+        });
+      }
     },
   });

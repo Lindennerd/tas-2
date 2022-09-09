@@ -58,7 +58,12 @@ export function QuestionTypeButton({
         open={toggleMultiplechoiceDialog}
         size="md"
       >
-        <DialogHeader>Opções</DialogHeader>
+        <DialogHeader>
+          <p>Opções</p>
+          <span className="text-sm text-gray-500 ml-4">
+            Use a tecla enter ou o botão para adicionar novas opções.
+          </span>
+        </DialogHeader>
         <DialogBody>
           <div className="w-full space-y-2">
             <MultipleChoiceForm

@@ -6,10 +6,10 @@ import { ManifestQuestionMultipleChoice } from "./ManifestQuestionMultipleChoice
 import { ManifestQuestionText } from "./ManifestQuestionText";
 import { CommentForm } from "../Comments/CommentForm";
 import { ManifestQuestionFile } from "./ManifestQuestionFile";
+import { useUnsavedChangesContext } from "@/context/manifest.changes.context";
 
 interface ManifestQuestionProps {
   question: QuestionOutput;
-  manifestId: string;
 }
 
 function ManifestQuestionFactory({
@@ -33,6 +33,7 @@ function ManifestQuestionFactory({
 
 export function ManifestQuestion(props: ManifestQuestionProps) {
   const [openAddComment, setOpenAddComment] = useState(false);
+
   return (
     <>
       <div className="flex justify-between p-2 gap-4 items-center">
